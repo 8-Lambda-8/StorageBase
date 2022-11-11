@@ -1,0 +1,86 @@
+$space-cadet: #222e50ff;
+$flax: #e1ce7aff;
+$middle-grey: #8a817cff;
+$uranian-blue: #add9f4ff;
+$ruby-red: #a4031fff;
+
+$primary: $space-cadet;
+$secondary: $flax;
+$thirdiary: $middle-grey;
+
+$background: #242424;
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: $background;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  height: 100vh;
+  scrollbar-gutter: stable;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#app > div {
+  display: flex;
+
+  height: 100%;
+}
+
+header {
+  height: 3rem;
+  background-color: $primary;
+  border-bottom: $thirdiary 2px solid;
+}
+
+h1 {
+  margin: 0;
+  margin-top: 0.7rem;
+  margin-left: 2rem;
+  font-size: 2rem;
+}
+
+nav {
+  height: 100%;
+  width: 8rem;
+  background-color: $primary;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+a {
+  font-weight: 500;
+  color: $secondary;
+  text-decoration: inherit;
+}
+a:hover {
+  background-color: $thirdiary;
+}
+nav > a {
+  padding: 1rem;
+}
