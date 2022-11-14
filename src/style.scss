@@ -49,6 +49,7 @@ body {
 header {
   display: flex;
   height: 3rem;
+  padding: 0.5rem;
   background-color: $primary;
   border-bottom: $thirdiary 2px solid;
   img {
@@ -58,8 +59,7 @@ header {
 }
 
 h1 {
-  margin: 0;
-  margin-top: 0.7rem;
+  margin: auto;
   margin-left: 2rem;
   font-size: 2rem;
 }
