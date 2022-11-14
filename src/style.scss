@@ -47,9 +47,14 @@ body {
 }
 
 header {
+  display: flex;
   height: 3rem;
   background-color: $primary;
   border-bottom: $thirdiary 2px solid;
+  img {
+    width: 3rem;
+    height: 3rem;
+  }
 }
 
 h1 {

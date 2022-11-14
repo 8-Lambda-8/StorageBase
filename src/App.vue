@@ -2,7 +2,8 @@
 </script>
 
 <template>
-  <header>
+  <header >
+    <img class="logo" src="/storagebase.svg"/>
     <h1>StorageBase</h1>
   </header>
   <div>
