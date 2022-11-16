@@ -1,5 +1,18 @@
 <script setup lang="ts">
+import { onAuthStateChanged } from "@firebase/auth";
+import { onMounted, ref } from "vue";
+import { RouterLink, RouterView } from "vue-router";
+import { auth } from "./firebase";
 
+const isLogedIn = ref(false);
+
+onMounted(() => {
+  onAuthStateChanged(auth, (user) => {
+    console.log("%c" + user?.displayName, "color:green; font-size:2rem");
+
+    isLogedIn.value = user != null;
+  });
+});
 </script>
 
 <template>
@@ -8,7 +21,7 @@
     <h1>StorageBase</h1>
   </header>
   <div>
-    <nav>
+    <nav v-if="isLogedIn">
       <router-link to="/">StoredParts</router-link>
       <router-link to="/parts">Parts</router-link>
       <router-link to="/categories">Categories</router-link>
