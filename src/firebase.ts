@@ -2,6 +2,10 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
+import firebase from "firebase/compat/app";
+import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBzZaiu-5LyOdSk8mUgOn9XSQqymu71PVk",
   authDomain: "storagebase-4cfb2.firebaseapp.com",
@@ -25,3 +29,13 @@ enableIndexedDbPersistence(db).catch((err) => {
 
 //Initialize Auth
 export const auth = getAuth();
+
+export const ui = new firebaseui.auth.AuthUI(auth);
+
+export const uiConfig = {
+  signInSuccessUrl: "/",
+  signInOptions: [
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+  ],
+};
