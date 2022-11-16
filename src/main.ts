@@ -13,6 +13,7 @@ const routes = [
     component: () => import("./views/Storage.vue"),
   },
   { path: "/projects", name: "Projects", component: () => import("./views/Projects.vue") },
+  { path: "/login", name: "Login", component: () => import("./views/Login.vue") },
 ];
 
 const app = createApp(App);
