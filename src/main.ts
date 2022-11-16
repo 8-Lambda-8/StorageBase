@@ -1,5 +1,25 @@
 import { createApp } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 import "./style.scss";
 import App from "./App.vue";
 
-createApp(App).mount("#app");
+const routes = [
+  { path: "/", name: "StoredParts", component: () => import("./views/StoredParts.vue") },
+  { path: "/parts", name: "Parts", component: () => import("./views/Parts.vue") },
+  { path: "/categories", name: "Categories", component: () => import("./views/Categories.vue") },
+  {
+    path: "/storage",
+    name: "Storage Locations",
+    component: () => import("./views/Storage.vue"),
+  },
+  { path: "/projects", name: "Projects", component: () => import("./views/Projects.vue") },
+];
+
+const app = createApp(App);
+export const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+app.use(router);
+app.mount("#app");
