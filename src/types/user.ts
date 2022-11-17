@@ -15,6 +15,17 @@ export class User {
     this.permissionLevel = 0;
     this.storedParts = new Set<StoredPartDocRef>();
   }
+
+  getJSON(): UserI {
+    return {
+      name: this.name,
+      permissionLevel: this.permissionLevel,
+      imgUrl: this.imgUrl,
+      lastOnline: this.lastOnline,
+      storedParts: this.storedParts,
+      userSettings: this.userSettings,
+    };
+  }
 }
 
 export interface UserI {
