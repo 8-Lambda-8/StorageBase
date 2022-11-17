@@ -7,7 +7,10 @@ import { UserColRef, UserI } from "./types/user";
 import { doc, onSnapshot, Timestamp } from "@firebase/firestore";
 import { StoredPartDocRef } from "./types/part";
 
+import UserCard from "./components/UserCard.vue";
+
 const isLogedIn = ref(false);
+const userCardExtended = ref(false);
 const router = useRouter();
 
 const userDataRef = ref<UserI>({
@@ -41,6 +44,10 @@ onMounted(() => {
     });
   });
 });
+
+function toggleUserCard() {
+  userCardExtended.value = !userCardExtended.value;
+}
 </script>
 
 <template>
@@ -50,6 +57,7 @@ onMounted(() => {
     <button href="" class="userBubble" @click="toggleUserCard()" :disabled="userDataRef.name == ''">
       <img v-bind:src="userDataRef.imgUrl" alt="User Picture" />
     </button>
+    <UserCard v-if="userCardExtended" :user="userDataRef" />
   </header>
   <div>
     <nav v-if="isLogedIn">
@@ -63,7 +71,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .routerChild {
   height: 100%;
   width: 100%;
@@ -81,5 +89,12 @@ onMounted(() => {
     width: 100%;
     border-radius: 50%;
   }
+}
+.userCard {
+  position: absolute;
+  top: 4.5rem;
+  right: 0.5rem;
+  height: 20rem;
+  width: 15rem;
 }
 </style>
