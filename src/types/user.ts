@@ -30,3 +30,12 @@ interface UserSettings {}
 
 export const UserColRef = collection(db, "User") as CollectionReference<User>;
 export type UserDocRef = DocumentReference<User>;
+
+//Permission Classes
+//
+//0:no Permissions	                  No User
+//1:ro		                            Spectator	
+//2:create and edit own(default)	    User
+//3:create and edit of lower users 	  KeyUser
+//4:admin 	                          Admin
+//5:superAdmin                        Root
