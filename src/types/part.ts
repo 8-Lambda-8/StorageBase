@@ -1,5 +1,5 @@
 import { UserDocRef } from "./user";
-import { CategoryDocRef } from "./category";
+import { CategoryDocRef } from "./types";
 import { Timestamp, CollectionReference, DocumentReference, collection } from "firebase/firestore";
 import {
   Footprint,

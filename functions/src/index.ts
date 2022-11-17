@@ -1,9 +1,9 @@
-import * as functions from "firebase-functions";
+import { region } from "firebase-functions";
+import { onCreateUserFunction, onDeleteUserFunction } from "./usermanagement";
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const ServerRegion = "europe-west3";
+
+// User Management
+export const onCreateUser = region(ServerRegion).auth.user().onCreate(onCreateUserFunction);
+
+export const onDeleteUser = region(ServerRegion).auth.user().onDelete(onDeleteUserFunction);

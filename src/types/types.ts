@@ -6,7 +6,7 @@ import {
   CollectionReference,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { User, UserDocRef } from "./user";
+import { UserDocRef } from "./user";
 
 export interface Category {
   name: string;

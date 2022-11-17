@@ -22,11 +22,11 @@ module.exports = {
   ],
   plugins: ["@typescript-eslint", "import"],
   rules: {
-    quotes: ["error", "double"],
+    "quotes": ["error", "double"],
     "import/no-unresolved": 0,
     "object-curly-spacing": ["error", "always"],
     "max-len": ["error", { code: 100 }],
     "require-jsdoc": ["off"],
-    indent: ["error", 2, { ignoredNodes: ["PropertyDefinition"] }],
+    "indent": ["error", 2, { ignoredNodes: ["PropertyDefinition"] }],
   },
 };
