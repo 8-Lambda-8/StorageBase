@@ -17,6 +17,15 @@ export class User {
   }
 }
 
+export interface UserI {
+  name: string;
+  permissionLevel: number;
+  imgUrl?: string;
+  lastOnline?: Timestamp;
+  storedParts: Set<StoredPartDocRef>;
+  userSettings: UserSettings;
+}
+
 interface UserSettings {}
 
 export const UserColRef = collection(db, "User") as CollectionReference<User>;
