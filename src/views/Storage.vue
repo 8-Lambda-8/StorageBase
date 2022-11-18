@@ -1,5 +1,9 @@
 <template>
-  <div class="routerChild">StorageLocations</div>
+  <div class="routerChild">
+    <div>
+      <button>New Storage Location</button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
