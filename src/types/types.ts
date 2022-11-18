@@ -19,7 +19,8 @@ export type CategoryDocRef = DocumentReference<Category>;
 export interface StorageLocation {
   owner: UserDocRef;
   location: GeoPoint;
-  locationDescription: string;
+  name: string;
+  description: string;
 }
 export const StorageLocationColRef = collection(
   db,
