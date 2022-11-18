@@ -23,6 +23,9 @@ export async function onCreateUserFunction(user: UserRecord) {
       picUrl: user.photoURL ?? "",
       lastOnline: Timestamp.now(),
       storedParts: [],
+      storageLocations: [],
+      groups: [],
+      owningGroups: [],
       userSettings: {},
     })
     .catch();
