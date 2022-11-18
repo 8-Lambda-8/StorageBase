@@ -1,6 +1,7 @@
 import { collection, CollectionReference, DocumentReference, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { StoredPartDocRef } from "./part";
+import { StorageLocationDocRef } from "./types";
 
 export class User {
   name: string;
@@ -8,12 +9,14 @@ export class User {
   imgUrl?: string;
   lastOnline?: Timestamp;
   storedParts: Set<StoredPartDocRef>;
+  storageLocations: Set<StorageLocationDocRef>;
   userSettings: UserSettings = {};
 
   constructor(name: string) {
     this.name = name;
     this.permissionLevel = 0;
     this.storedParts = new Set<StoredPartDocRef>();
+    this.storageLocations = new Set<StorageLocationDocRef>();
   }
 
   getJSON(): UserI {
@@ -23,6 +26,7 @@ export class User {
       imgUrl: this.imgUrl,
       lastOnline: this.lastOnline,
       storedParts: this.storedParts,
+      storageLocations: this.storageLocations,
       userSettings: this.userSettings,
     };
   }
@@ -34,6 +38,7 @@ export interface UserI {
   imgUrl?: string;
   lastOnline?: Timestamp;
   storedParts: Set<StoredPartDocRef>;
+  storageLocations: Set<StorageLocationDocRef>;
   userSettings: UserSettings;
 }
 

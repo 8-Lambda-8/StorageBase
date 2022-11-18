@@ -6,6 +6,7 @@ import { auth } from "./firebase";
 import { UserColRef, UserI } from "./types/user";
 import { doc, onSnapshot, Timestamp } from "@firebase/firestore";
 import { StoredPartDocRef } from "./types/part";
+import { StorageLocationDocRef } from "./types/types";
 
 import UserCard from "./components/UserCard.vue";
 
@@ -19,6 +20,7 @@ const userDataRef = ref<UserI>({
   imgUrl: "/userIcon.png",
   lastOnline: Timestamp.fromMillis(0),
   storedParts: new Set<StoredPartDocRef>(),
+  storageLocations: new Set<StorageLocationDocRef>(),
   userSettings: {},
 });
 onMounted(() => {
