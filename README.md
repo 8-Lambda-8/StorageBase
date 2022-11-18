@@ -1,3 +1,16 @@
+# StorageBase
+
+Inventory management software like [PartKeepr](https://github.com/partkeepr/PartKeepr), but with TypeScript and Vue3 instead of PHP and Symfony2
+
+planned improvements compared to PartKeepr:
+
+- User permission management
+- Sharing of Storage Locations, Parts, Projects
+- (send your ideas :D)
+
+backend and hosting currently with firebase:
+[StorageBase](https://storagebase-4cfb2.web.app/)
+
 # Vue 3 + TypeScript + Vite
 
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
