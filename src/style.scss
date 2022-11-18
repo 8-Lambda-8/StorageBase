@@ -90,6 +90,8 @@ nav > a {
   padding: 1rem;
 }
 
+input,
+textarea,
 button {
   border-radius: 8px;
   border: 2px solid transparent;
@@ -102,9 +104,13 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+input:hover,
+textarea:hover,
 button:hover {
   border-color: #646cff;
 }
+input:focus,
+textarea:focus,
 button:active {
   outline: 4px auto -webkit-focus-ring-color;
 }

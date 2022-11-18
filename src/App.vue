@@ -81,6 +81,8 @@ function toggleUserCard() {
   width: 100%;
   padding: 1rem;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 .userBubble {
   height: 100%;
