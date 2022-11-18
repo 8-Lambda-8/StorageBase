@@ -12,6 +12,11 @@ const routes = [
     name: "Storage Locations",
     component: () => import("./views/Storage.vue"),
   },
+  {
+    path: "/storage/edit/:id",
+    name: "Storage Locations Editor",
+    component: () => import("./views/EditStorage.vue"),
+  },
   { path: "/projects", name: "Projects", component: () => import("./views/Projects.vue") },
   { path: "/login", name: "Login", component: () => import("./views/Login.vue") },
 ];
