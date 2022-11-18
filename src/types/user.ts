@@ -1,7 +1,7 @@
 import { collection, CollectionReference, DocumentReference, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { StoredPartDocRef } from "./part";
-import { StorageLocationDocRef } from "./types";
+import { GroupDocRef, StorageLocationDocRef } from "./types";
 
 export class User {
   name: string;
@@ -10,6 +10,8 @@ export class User {
   lastOnline?: Timestamp;
   storedParts: Set<StoredPartDocRef>;
   storageLocations: Set<StorageLocationDocRef>;
+  owningGroups: Set<GroupDocRef>;
+  groups: Set<GroupDocRef>;
   userSettings: UserSettings = {};
 
   constructor(name: string) {
@@ -17,6 +19,8 @@ export class User {
     this.permissionLevel = 0;
     this.storedParts = new Set<StoredPartDocRef>();
     this.storageLocations = new Set<StorageLocationDocRef>();
+    this.groups = new Set<GroupDocRef>();
+    this.owningGroups = new Set<GroupDocRef>();
   }
 
   getJSON(): UserI {
@@ -27,6 +31,8 @@ export class User {
       lastOnline: this.lastOnline,
       storedParts: this.storedParts,
       storageLocations: this.storageLocations,
+      groups: this.groups,
+      owningGroups: this.owningGroups,
       userSettings: this.userSettings,
     };
   }
@@ -39,6 +45,8 @@ export interface UserI {
   lastOnline?: Timestamp;
   storedParts: Set<StoredPartDocRef>;
   storageLocations: Set<StorageLocationDocRef>;
+  groups: Set<GroupDocRef>;
+  owningGroups: Set<GroupDocRef>;
   userSettings: UserSettings;
 }
 
@@ -50,7 +58,7 @@ export type UserDocRef = DocumentReference<User>;
 //Permission Classes
 //
 //0:no Permissions	                  No User
-//1:ro		                            Spectator	
+//1:ro		                            Spectator
 //2:create and edit own(default)	    User
 //3:create and edit of lower users 	  KeyUser
 //4:admin 	                          Admin
