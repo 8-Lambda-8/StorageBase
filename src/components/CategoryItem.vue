@@ -3,7 +3,7 @@
     <h4>
       {{ category.name }}
     </h4>
-    <a :href="'/categories/edit/' + id">edit</a>
+    <a v-if="userDataRef.permissionLevel > 3" :href="'/categories/edit/' + id">edit</a>
     <CategoryItem
       v-for="categoryLocationDoc in categoriesDocsRef"
       :category="categoryLocationDoc.data()"
@@ -17,6 +17,7 @@ import { QueryDocumentSnapshot, query, where, doc, orderBy, onSnapshot } from "@
 import { Unsubscribe } from "@firebase/util";
 import { ref, onMounted, onUnmounted } from "vue";
 import { Category, CategoryColRef } from "../types/types";
+import { userDataRef } from "../types/user";
 
 const props = defineProps<{
   category: Category;
