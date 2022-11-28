@@ -24,6 +24,7 @@ defineProps<{
 
 <style scoped lang="scss">
 .userCard {
+  z-index: 999;
   background-color: #8a817cff;
   border-radius: 1rem;
   display: flex;
