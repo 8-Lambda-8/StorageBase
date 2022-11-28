@@ -1,6 +1,6 @@
 <template>
   <div class="routerChild">
-    <div>
+    <div v-if="userDataRef.permissionLevel > 3">
       <button @click="newCategory">New Category</button>
     </div>
   </div>
@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { userDataRef } from "../types/user";
 const router = useRouter();
 
 function newCategory() {
