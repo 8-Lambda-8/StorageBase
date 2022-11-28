@@ -75,5 +75,25 @@ export const getCurrentUser = () => {
   });
 };
 
+router.beforeEach(async (to, from, next) => {
+  console.log({ to, from });
+  if (to.matched.some((r) => r.meta.requiresAuth)) {
+    //Auth required
+    if (await getCurrentUser()) {
+      next();
+    } else {
+      next("/login");
+    }
+  } else if (to.matched.some((r) => r.name === "Login")) {
+    //Login
+    if (await getCurrentUser()) next(from); // go back if logged in
+
+    if (from.path === "/login") next("/");
+    next();
+  } else {
+    next();
+  }
+});
+
 app.use(router);
 app.mount("#app");
