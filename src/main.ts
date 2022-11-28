@@ -18,6 +18,7 @@ const routes = [
     name: "Parts",
     meta: {
       requiresAuth: true,
+      title: "Parts",
     },
     component: () => import("./views/Parts.vue"),
   },
@@ -26,6 +27,7 @@ const routes = [
     name: "Categories",
     meta: {
       requiresAuth: true,
+      title: "Categories",
     },
     component: () => import("./views/Categories.vue"),
   },
@@ -34,6 +36,7 @@ const routes = [
     name: "Storage Locations",
     meta: {
       requiresAuth: true,
+      title: "Storage Locations",
     },
     component: () => import("./views/Storage.vue"),
   },
@@ -42,6 +45,7 @@ const routes = [
     name: "Storage Locations Editor",
     meta: {
       requiresAuth: true,
+      title: "Edit Storage Locations",
     },
     component: () => import("./views/EditStorage.vue"),
   },
@@ -50,10 +54,18 @@ const routes = [
     name: "Projects",
     meta: {
       requiresAuth: true,
+      title: "Projects",
     },
     component: () => import("./views/Projects.vue"),
   },
-  { path: "/login", name: "Login", component: () => import("./views/Login.vue") },
+  {
+    path: "/login",
+    name: "Login",
+    meta: {
+      title: "Login",
+    },
+    component: () => import("./views/Login.vue"),
+  },
 ];
 
 const app = createApp(App);
@@ -77,6 +89,15 @@ export const getCurrentUser = () => {
 
 router.beforeEach(async (to, from, next) => {
   console.log({ to, from });
+
+  const metaTitle = to.matched[0].meta.title;
+
+  if (typeof metaTitle == "string") {
+    document.title = metaTitle + " | Storage Base";
+  } else {
+    document.title = "Storage Base";
+  }
+
   if (to.matched.some((r) => r.meta.requiresAuth)) {
     //Auth required
     if (await getCurrentUser()) {
