@@ -27,7 +27,7 @@ let CategoryDocRef: CategoryDocRef;
 const categoryRef = ref<Category>({
   name: "",
   description: "",
-  //parentCategory: undefined,
+  parentCategory: null,
   childCategories: new Set<CategoryDocRef>(),
 });
 

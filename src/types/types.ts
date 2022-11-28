@@ -11,7 +11,7 @@ import { UserDocRef } from "./user";
 export interface Category {
   name: string;
   description: string;
-  parentCategory?: CategoryDocRef;
+  parentCategory: CategoryDocRef | null;
   childCategories: Set<CategoryDocRef>;
 }
 export const CategoryColRef = collection(db, "Category") as CollectionReference<Category>;
