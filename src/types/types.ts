@@ -10,6 +10,7 @@ import { UserDocRef } from "./user";
 
 export interface Category {
   name: string;
+  description: string;
   parentCategory?: CategoryDocRef;
   childCategories: Set<CategoryDocRef>;
 }

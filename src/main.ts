@@ -32,6 +32,15 @@ const routes = [
     component: () => import("./views/Categories.vue"),
   },
   {
+    path: "/categories/edit/:id",
+    name: "Category Editor",
+    meta: {
+      requiresAuth: true,
+      title: "Edit Category",
+    },
+    component: () => import("./views/EditCategory.vue"),
+  },
+  {
     path: "/storage",
     name: "Storage Locations",
     meta: {
@@ -42,10 +51,10 @@ const routes = [
   },
   {
     path: "/storage/edit/:id",
-    name: "Storage Locations Editor",
+    name: "Storage Location Editor",
     meta: {
       requiresAuth: true,
-      title: "Edit Storage Locations",
+      title: "Edit Storage Location",
     },
     component: () => import("./views/EditStorage.vue"),
   },
