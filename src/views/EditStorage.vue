@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
+import { getAuth } from "@firebase/auth";
 import { addDoc, doc, GeoPoint, onSnapshot, setDoc } from "@firebase/firestore";
-import { auth } from "../firebase";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { StorageLocationColRef, StorageLocationDocRef } from "../types/types";
@@ -27,7 +27,7 @@ import { UserColRef } from "../types/user";
 let SLDocRef: StorageLocationDocRef;
 
 const storageRef = ref({
-  owner: doc(UserColRef, auth.currentUser?.uid ?? "1"),
+  owner: doc(UserColRef, getAuth().currentUser?.uid ?? "1"),
   location: new GeoPoint(0, 0),
   name: "",
   description: "",
@@ -57,7 +57,7 @@ onMounted(() => {
 
 function apply() {
   if (idRef.value === "new") {
-    storageRef.value.owner = doc(UserColRef, auth.currentUser?.uid ?? "1");
+    storageRef.value.owner = doc(UserColRef, getAuth().currentUser?.uid ?? "1");
 
     addDoc(StorageLocationColRef, storageRef.value).then((docRef) => {
       SLDocRef = docRef;
@@ -72,7 +72,7 @@ function apply() {
 
 async function ok() {
   if (idRef.value === "new") {
-    storageRef.value.owner = doc(UserColRef, auth.currentUser?.uid ?? "1");
+    storageRef.value.owner = doc(UserColRef, getAuth().currentUser?.uid ?? "1");
     await addDoc(StorageLocationColRef, storageRef.value);
   } else await setDoc(SLDocRef, storageRef.value);
   router.push("/storage");

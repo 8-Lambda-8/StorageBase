@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onAuthStateChanged } from "@firebase/auth";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { onMounted, ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-import { auth } from "./firebase";
 import { UserColRef, UserI } from "./types/user";
 import { doc, onSnapshot, Timestamp } from "@firebase/firestore";
 import { StoredPartDocRef } from "./types/part";
@@ -25,7 +24,7 @@ const userDataRef = ref<UserI>({
   userSettings: {},
 });
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(getAuth(), (user) => {
     console.log("%c" + user?.displayName, "color:green; font-size:2rem");
     console.log("%c" + user?.uid, "color:green; font-size:1rem");
 
