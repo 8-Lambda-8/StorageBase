@@ -5,20 +5,54 @@ import App from "./App.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const routes = [
-  { path: "/", name: "StoredParts", component: () => import("./views/StoredParts.vue") },
-  { path: "/parts", name: "Parts", component: () => import("./views/Parts.vue") },
-  { path: "/categories", name: "Categories", component: () => import("./views/Categories.vue") },
+  {
+    path: "/",
+    name: "StoredParts",
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import("./views/StoredParts.vue"),
+  },
+  {
+    path: "/parts",
+    name: "Parts",
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import("./views/Parts.vue"),
+  },
+  {
+    path: "/categories",
+    name: "Categories",
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import("./views/Categories.vue"),
+  },
   {
     path: "/storage",
     name: "Storage Locations",
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import("./views/Storage.vue"),
   },
   {
     path: "/storage/edit/:id",
     name: "Storage Locations Editor",
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import("./views/EditStorage.vue"),
   },
-  { path: "/projects", name: "Projects", component: () => import("./views/Projects.vue") },
+  {
+    path: "/projects",
+    name: "Projects",
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import("./views/Projects.vue"),
+  },
   { path: "/login", name: "Login", component: () => import("./views/Login.vue") },
 ];
 
