@@ -4,16 +4,47 @@ import {
   DocumentReference,
   collection,
   CollectionReference,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+  FirestoreDataConverter,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { UserDocRef } from "./user";
 
 export interface Category {
   name: string;
-  parentCategory?: CategoryDocRef;
+  description: string;
+  parentCategory: CategoryDocRef | null;
   childCategories: Set<CategoryDocRef>;
 }
-export const CategoryColRef = collection(db, "Category") as CollectionReference<Category>;
+const categoryConverter = {
+  toFirestore(category: Category) {
+    return {
+      name: category.name,
+      description: category.description,
+      parentCategory: category.parentCategory,
+      childCategories: new Array(...category.childCategories),
+    };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot<{
+      name: string;
+      description: string;
+      parentCategory: CategoryDocRef | null;
+      childCategories: Array<CategoryDocRef>;
+    }>,
+    options: SnapshotOptions
+  ) {
+    const data = snapshot.data(options)!;
+    return {
+      name: data.name,
+      description: data.description,
+      parentCategory: data.parentCategory,
+      childCategories: new Set(data.childCategories),
+    };
+  },
+} as FirestoreDataConverter<Category>;
+export const CategoryColRef = collection(db, "Category").withConverter(categoryConverter);
 export type CategoryDocRef = DocumentReference<Category>;
 
 export interface StorageLocation {

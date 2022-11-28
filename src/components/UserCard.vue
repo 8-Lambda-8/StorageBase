@@ -8,12 +8,12 @@
 
     <div></div>
     <!-- <button @click="useRouter().push("/settings")">Settings</button> -->
-    <button @click="auth.signOut()">LogOut</button>
+    <button @click="getAuth().signOut()">LogOut</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { auth } from "../firebase";
+import { getAuth } from "@firebase/auth";
 import { UserI } from "../types/user";
 
 defineProps<{

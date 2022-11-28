@@ -1,31 +1,17 @@
 <script setup lang="ts">
-import { onAuthStateChanged } from "@firebase/auth";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { onMounted, ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-import { auth } from "./firebase";
-import { UserColRef, UserI } from "./types/user";
-import { doc, onSnapshot, Timestamp } from "@firebase/firestore";
-import { StoredPartDocRef } from "./types/part";
-import { GroupDocRef, StorageLocationDocRef } from "./types/types";
+import { UserColRef, userDataRef } from "./types/user";
+import { doc, onSnapshot } from "@firebase/firestore";
 
 import UserCard from "./components/UserCard.vue";
 
 const isLogedIn = ref(false);
 const userCardExtended = ref(false);
 
-const userDataRef = ref<UserI>({
-  name: "",
-  permissionLevel: 0,
-  imgUrl: "/userIcon.png",
-  lastOnline: Timestamp.fromMillis(0),
-  storedParts: new Set<StoredPartDocRef>(),
-  storageLocations: new Set<StorageLocationDocRef>(),
-  groups: new Set<GroupDocRef>(),
-  owningGroups: new Set<GroupDocRef>(),
-  userSettings: {},
-});
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(getAuth(), (user) => {
     console.log("%c" + user?.displayName, "color:green; font-size:2rem");
     console.log("%c" + user?.uid, "color:green; font-size:1rem");
 
@@ -69,6 +55,7 @@ function toggleUserCard() {
 
 <style scoped lang="scss">
 .routerChild {
+  overflow-y: auto;
   height: 100%;
   width: 100%;
   padding: 1rem;

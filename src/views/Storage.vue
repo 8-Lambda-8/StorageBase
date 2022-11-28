@@ -26,9 +26,8 @@ import {
 } from "firebase/firestore";
 import { onMounted, onUnmounted, ref } from "vue";
 import { StorageLocation, StorageLocationColRef } from "../types/types";
-import { auth } from "../firebase";
 import { UserColRef } from "../types/user";
-import { onAuthStateChanged } from "@firebase/auth";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
 
 import StorageItem from "../components/StorageItem.vue";
 const router = useRouter();
@@ -42,7 +41,7 @@ const storageLocationsDocsRef = ref(new Array<QueryDocumentSnapshot<StorageLocat
 let unsubscribe: Unsubscribe;
 
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(getAuth(), (user) => {
     if (unsubscribe) unsubscribe();
 
     const q = query(
