@@ -22,7 +22,7 @@ const routes = [
 ];
 
 const app = createApp(App);
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
 });
