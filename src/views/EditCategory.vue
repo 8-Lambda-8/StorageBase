@@ -1,11 +1,11 @@
 <template>
   <div class="routerChild">
-    <div class="EditStorage">
-      <h2>Edit Storage Location</h2>
+    <div class="EditCategory">
+      <h2>Edit Category</h2>
       <label for="name">Name</label>
-      <input type="text" name="name" v-model="storageRef.name" maxlength="20" />
+      <input type="text" name="name" v-model="categoryRef.name" maxlength="20" />
       <label for="description">Description</label>
-      <textarea type="text" name="description" v-model="storageRef.description"></textarea>
+      <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
 
       <div class="buttons">
         <button @click="ok">OK</button>
@@ -17,20 +17,18 @@
 </template>
 
 <script setup lang="ts">
-import { addDoc, doc, GeoPoint, onSnapshot, setDoc } from "@firebase/firestore";
-import { auth } from "../firebase";
+import { addDoc, doc, onSnapshot, setDoc } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { StorageLocationColRef, StorageLocationDocRef } from "../types/types";
-import { UserColRef } from "../types/user";
+import { Category, CategoryColRef, CategoryDocRef } from "../types/types";
 
-let SLDocRef: StorageLocationDocRef;
+let CategoryDocRef: CategoryDocRef;
 
-const storageRef = ref({
-  owner: doc(UserColRef, auth.currentUser?.uid ?? "1"),
-  location: new GeoPoint(0, 0),
+const categoryRef = ref<Category>({
   name: "",
   description: "",
+  //parentCategory: undefined,
+  childCategories: new Set<CategoryDocRef>(),
 });
 
 const idRef = ref("new");
@@ -40,51 +38,49 @@ onMounted(() => {
   const id = useRoute().params.id;
 
   if (typeof id !== "string") {
-    router.push("/storage");
+    router.push("/category");
     return;
   }
   idRef.value = id;
 
-  SLDocRef = doc(StorageLocationColRef, id);
+  CategoryDocRef = doc(CategoryColRef, id);
 
   if (id !== "new" && id.length === 20)
-    onSnapshot(SLDocRef, (docSnap) => {
+    onSnapshot(CategoryDocRef, (docSnap) => {
       const data = docSnap.data();
       if (!data) return;
-      storageRef.value = data;
+      categoryRef.value = data;
     });
 });
 
 function apply() {
   if (idRef.value === "new") {
-    storageRef.value.owner = doc(UserColRef, auth.currentUser?.uid ?? "1");
 
-    addDoc(StorageLocationColRef, storageRef.value).then((docRef) => {
-      SLDocRef = docRef;
+    addDoc(CategoryColRef, categoryRef.value).then((docRef) => {
+      CategoryDocRef = docRef;
       idRef.value = docRef.id;
-      router.push("/storage/edit/" + docRef.id);
+      router.push("/categories/edit/" + docRef.id);
     });
     return;
   }
 
-  setDoc(SLDocRef, storageRef.value);
+  setDoc(CategoryDocRef, categoryRef.value);
 }
 
 async function ok() {
   if (idRef.value === "new") {
-    storageRef.value.owner = doc(UserColRef, auth.currentUser?.uid ?? "1");
-    await addDoc(StorageLocationColRef, storageRef.value);
-  } else await setDoc(SLDocRef, storageRef.value);
-  router.push("/storage");
+    await addDoc(CategoryColRef, categoryRef.value);
+  } else await setDoc(CategoryDocRef, categoryRef.value);
+  router.push("/categories");
 }
 
 function cancel() {
-  router.push("/storage");
+  router.push("/categories");
 }
 </script>
 
 <style scoped lang="scss">
-.EditStorage {
+.EditCategory {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
