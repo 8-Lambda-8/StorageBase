@@ -1,4 +1,5 @@
 import { collection, CollectionReference, DocumentReference, Timestamp } from "firebase/firestore";
+import { ref } from "vue";
 import { db } from "../firebase";
 import { StoredPartDocRef } from "./part";
 import { GroupDocRef, StorageLocationDocRef } from "./types";
@@ -63,3 +64,15 @@ export type UserDocRef = DocumentReference<User>;
 //3:create and edit of lower users 	  KeyUser
 //4:admin 	                          Admin
 //5:superAdmin                        Root
+
+export const userDataRef = ref<UserI>({
+  name: "",
+  permissionLevel: 0,
+  imgUrl: "/userIcon.png",
+  lastOnline: Timestamp.fromMillis(0),
+  storedParts: new Set<StoredPartDocRef>(),
+  storageLocations: new Set<StorageLocationDocRef>(),
+  groups: new Set<GroupDocRef>(),
+  owningGroups: new Set<GroupDocRef>(),
+  userSettings: {},
+});
