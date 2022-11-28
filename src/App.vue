@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onAuthStateChanged } from "@firebase/auth";
 import { onMounted, ref } from "vue";
-import { RouterLink, RouterView, useRouter } from "vue-router";
+import { RouterLink, RouterView } from "vue-router";
 import { auth } from "./firebase";
 import { UserColRef, UserI } from "./types/user";
 import { doc, onSnapshot, Timestamp } from "@firebase/firestore";
@@ -12,7 +12,6 @@ import UserCard from "./components/UserCard.vue";
 
 const isLogedIn = ref(false);
 const userCardExtended = ref(false);
-const router = useRouter();
 
 const userDataRef = ref<UserI>({
   name: "",
@@ -31,14 +30,7 @@ onMounted(() => {
     console.log("%c" + user?.uid, "color:green; font-size:1rem");
 
     isLogedIn.value = user != null;
-    if (!user) {
-      router.push("/login");
-      return;
-    } else if (router.currentRoute.value.path == "/login") {
-      router.push("/");
-      return;
-    }
-
+    if (!user) return;
     onSnapshot(doc(UserColRef, user.uid), (userDoc) => {
       if (!userDoc.exists()) return;
 
