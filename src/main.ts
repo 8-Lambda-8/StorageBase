@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import "./style.scss";
 import App from "./App.vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const routes = [
   { path: "/", name: "StoredParts", component: () => import("./views/StoredParts.vue") },
@@ -26,6 +27,19 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const removeListener = onAuthStateChanged(
+      getAuth(),
+      (user) => {
+        removeListener();
+        resolve(user);
+      },
+      reject
+    );
+  });
+};
 
 app.use(router);
 app.mount("#app");
