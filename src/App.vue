@@ -69,6 +69,7 @@ function toggleUserCard() {
 
 <style scoped lang="scss">
 .routerChild {
+  overflow-y: auto;
   height: 100%;
   width: 100%;
   padding: 1rem;

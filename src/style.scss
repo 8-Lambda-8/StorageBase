@@ -42,7 +42,7 @@ body {
 }
 #app > div {
   display: flex;
-
+  overflow: hidden;
   height: 100%;
 }
 
