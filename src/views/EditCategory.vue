@@ -62,7 +62,7 @@ onMounted(() => {
       categoryRef.value = data;
     });
 
-  getCategoriesRecursive(null, -1);
+  getCategoriesRecursive(null, 0);
 });
 
 function apply() {
@@ -88,8 +88,11 @@ async function ok() {
 function cancel() {
   router.push("/categories");
 }
-
-const categoryTreeRef = ref<{ name: string; docRef: CategoryDocRef }[]>([]);
+interface optionInterface {
+  name: string;
+  docRef: CategoryDocRef | null;
+}
+const categoryTreeRef = ref<optionInterface[]>([{ name: "Root", docRef: null }]);
 
 async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: number) {
   level++;
@@ -99,10 +102,10 @@ async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: n
   for (const [i, catDoc] of qs.docs.entries()) {
     const treeSymbol = level == 0 ? "" : i >= qs.docs.length - 1 ? "└" : "├";
     categoryTreeRef.value.push({
-      name: "| ".repeat(Math.max(level - 1, 0)) + treeSymbol + catDoc.data().name,
+      name: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
       docRef: catDoc.ref,
     });
-    console.log(" |".repeat(level), catDoc.data().name, level);
+    console.log(categoryTreeRef.value[categoryTreeRef.value.length - 1].name, level);
     await getCategoriesRecursive(catDoc.ref, level);
   }
 }
