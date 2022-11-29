@@ -1,23 +1,34 @@
 import { UserDocRef } from "./user";
-import { CategoryDocRef } from "./types";
+import { CategoryDocRef, FootprintDocRef, PartParameterEntry } from "./types";
 import { Timestamp, CollectionReference, DocumentReference, collection } from "firebase/firestore";
 import {
-  Footprint,
   GroupDocRef,
-  Parameter,
   StockHistoryEntry,
   StorageLocationDocRef,
 } from "./types";
 import { db } from "../firebase";
 
-class Part {
+export interface PartI {
+  name: string;
+  partNr: string;
+  description: string;
+  category: CategoryDocRef;
+  footprint: FootprintDocRef;
+  comment: string;
+  status: string;
+  parameters: Array<PartParameterEntry>;
+  lastChange: Timestamp;
+  lastChangeUser: UserDocRef;
+}
+
+export class Part {
   name: string;
   partNr: string;
   description: string;
   comment: string;
   status: string;
-  parameters: Set<Parameter>;
-  footprint: Footprint;
+  parameters: Array<PartParameterEntry>;
+  footprint: FootprintDocRef;
   lastChange: Timestamp;
   lastChangeUser: UserDocRef;
   category: CategoryDocRef;
@@ -28,8 +39,8 @@ class Part {
     description: string,
     comment: string,
     status: string,
-    parameters: Set<Parameter>,
-    footprint: Footprint,
+    parameters: Array<PartParameterEntry>,
+    footprint: FootprintDocRef,
     lastChange: Timestamp,
     lastChangeUser: UserDocRef,
     category: CategoryDocRef

@@ -4,9 +4,6 @@ import {
   DocumentReference,
   collection,
   CollectionReference,
-  QueryDocumentSnapshot,
-  SnapshotOptions,
-  FirestoreDataConverter,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { UserDocRef } from "./user";
@@ -31,10 +28,19 @@ export const StorageLocationColRef = collection(
 ) as CollectionReference<StorageLocation>;
 export type StorageLocationDocRef = DocumentReference<StorageLocation>;
 
-export interface Parameter {
+export interface PartParameter {
   name: string;
+  description: string;
+  symbol: string;
   unit: Unit;
+}
+export const PartParameterColRef = collection(db, "PartParameter") as CollectionReference<PartParameter>;
+export type PartParameterDocRef = DocumentReference<PartParameter>;
+
+export interface PartParameterEntry {
+  parameter: PartParameterDocRef;
   value: number;
+  prefix: string;
 }
 
 export interface Unit {
