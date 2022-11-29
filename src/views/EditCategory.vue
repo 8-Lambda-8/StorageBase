@@ -6,6 +6,14 @@
       <input type="text" name="name" v-model="categoryRef.name" maxlength="20" />
       <label for="description">Description</label>
       <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
+      <label for="parent">Parent Category</label>
+      <v-select
+        name="parent"
+        label="name"
+        :options="categoryTreeRef"
+        :reduce="(option:optionInterface)=>option.docRef"
+        v-model="categoryRef.parentCategory"
+      />
 
       <div class="buttons">
         <button @click="ok">OK</button>
@@ -17,7 +25,16 @@
 </template>
 
 <script setup lang="ts">
-import { addDoc, doc, onSnapshot, setDoc } from "@firebase/firestore";
+import {
+  addDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  setDoc,
+} from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Category, CategoryColRef, CategoryDocRef } from "../types/types";
@@ -28,13 +45,14 @@ const categoryRef = ref<Category>({
   name: "",
   description: "",
   parentCategory: null,
-  childCategories: new Set<CategoryDocRef>(),
 });
+
+let allCat = [] as QueryDocumentSnapshot<Category>[];
 
 const idRef = ref("new");
 const router = useRouter();
 
-onMounted(() => {
+onMounted(async () => {
   const id = useRoute().params.id;
 
   if (typeof id !== "string") {
@@ -42,6 +60,9 @@ onMounted(() => {
     return;
   }
   idRef.value = id;
+
+  allCat = await (await getDocs(query(CategoryColRef, orderBy("name")))).docs;
+  await getCategoriesRecursive(null, 0);
 
   CategoryDocRef = doc(CategoryColRef, id);
 
@@ -55,7 +76,6 @@ onMounted(() => {
 
 function apply() {
   if (idRef.value === "new") {
-
     addDoc(CategoryColRef, categoryRef.value).then((docRef) => {
       CategoryDocRef = docRef;
       idRef.value = docRef.id;
@@ -76,6 +96,24 @@ async function ok() {
 
 function cancel() {
   router.push("/categories");
+}
+interface optionInterface {
+  name: string;
+  docRef: CategoryDocRef | null;
+}
+const categoryTreeRef = ref<optionInterface[]>([{ name: "Root", docRef: null }]);
+
+async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: number) {
+  level++;
+  const childDocs = allCat.filter((cat) => cat.data().parentCategory?.id == parentRef?.id);
+  for (const [i, catDoc] of childDocs.entries()) {
+    const treeSymbol = level == 0 ? "" : i >= childDocs.length - 1 ? "└" : "├";
+    categoryTreeRef.value.push({
+      name: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
+      docRef: catDoc.ref,
+    });
+    await getCategoriesRecursive(catDoc.ref, level);
+  }
 }
 </script>
 

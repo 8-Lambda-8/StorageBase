@@ -15,36 +15,8 @@ export interface Category {
   name: string;
   description: string;
   parentCategory: CategoryDocRef | null;
-  childCategories: Set<CategoryDocRef>;
 }
-const categoryConverter = {
-  toFirestore(category: Category) {
-    return {
-      name: category.name,
-      description: category.description,
-      parentCategory: category.parentCategory,
-      childCategories: new Array(...category.childCategories),
-    };
-  },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot<{
-      name: string;
-      description: string;
-      parentCategory: CategoryDocRef | null;
-      childCategories: Array<CategoryDocRef>;
-    }>,
-    options: SnapshotOptions
-  ) {
-    const data = snapshot.data(options)!;
-    return {
-      name: data.name,
-      description: data.description,
-      parentCategory: data.parentCategory,
-      childCategories: new Set(data.childCategories),
-    };
-  },
-} as FirestoreDataConverter<Category>;
-export const CategoryColRef = collection(db, "Category").withConverter(categoryConverter);
+export const CategoryColRef = collection(db, "Category") as CollectionReference<Category>;
 export type CategoryDocRef = DocumentReference<Category>;
 
 export interface StorageLocation {
@@ -80,7 +52,6 @@ export type FootprintDocRef = DocumentReference<Footprint>;
 export interface FootprintCategory {
   name: string;
   parentCategory?: FootprintCategoryDocRef;
-  childCategories: Set<FootprintCategoryDocRef>;
 }
 export const FootprintCategoryColRef = collection(
   db,
