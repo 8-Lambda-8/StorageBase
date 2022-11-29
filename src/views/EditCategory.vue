@@ -32,8 +32,8 @@ import {
   onSnapshot,
   orderBy,
   query,
+  QueryDocumentSnapshot,
   setDoc,
-  where,
 } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -47,10 +47,12 @@ const categoryRef = ref<Category>({
   parentCategory: null,
 });
 
+let allCat = [] as QueryDocumentSnapshot<Category>[];
+
 const idRef = ref("new");
 const router = useRouter();
 
-onMounted(() => {
+onMounted(async () => {
   const id = useRoute().params.id;
 
   if (typeof id !== "string") {
@@ -58,6 +60,9 @@ onMounted(() => {
     return;
   }
   idRef.value = id;
+
+  allCat = await (await getDocs(query(CategoryColRef, orderBy("name")))).docs;
+  await getCategoriesRecursive(null, 0);
 
   CategoryDocRef = doc(CategoryColRef, id);
 
@@ -67,8 +72,6 @@ onMounted(() => {
       if (!data) return;
       categoryRef.value = data;
     });
-
-  getCategoriesRecursive(null, 0);
 });
 
 function apply() {
@@ -102,16 +105,13 @@ const categoryTreeRef = ref<optionInterface[]>([{ name: "Root", docRef: null }])
 
 async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: number) {
   level++;
-  const qs = await getDocs(
-    query(CategoryColRef, where("parentCategory", "==", parentRef), orderBy("name"))
-  );
-  for (const [i, catDoc] of qs.docs.entries()) {
-    const treeSymbol = level == 0 ? "" : i >= qs.docs.length - 1 ? "└" : "├";
+  const childDocs = allCat.filter((cat) => cat.data().parentCategory?.id == parentRef?.id);
+  for (const [i, catDoc] of childDocs.entries()) {
+    const treeSymbol = level == 0 ? "" : i >= childDocs.length - 1 ? "└" : "├";
     categoryTreeRef.value.push({
       name: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
       docRef: catDoc.ref,
     });
-    console.log(categoryTreeRef.value[categoryTreeRef.value.length - 1].name, level);
     await getCategoriesRecursive(catDoc.ref, level);
   }
 }
