@@ -39,7 +39,6 @@ const categoryRef = ref<Category>({
   name: "",
   description: "",
   parentCategory: null,
-  childCategories: new Set<CategoryDocRef>(),
 });
 
 const idRef = ref("new");
