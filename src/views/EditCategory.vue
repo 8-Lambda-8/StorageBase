@@ -7,7 +7,13 @@
       <label for="description">Description</label>
       <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
       <label for="parent">Parent Category</label>
-      <v-select name="parent" label="name" :options="categoryTreeRef" />
+      <v-select
+        name="parent"
+        label="name"
+        :options="categoryTreeRef"
+        :reduce="(option:optionInterface)=>option.docRef"
+        v-model="categoryRef.parentCategory"
+      />
 
       <div class="buttons">
         <button @click="ok">OK</button>
