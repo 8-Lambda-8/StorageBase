@@ -6,6 +6,8 @@
       <input type="text" name="name" v-model="categoryRef.name" maxlength="20" />
       <label for="description">Description</label>
       <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
+      <label for="parent">Parent Category</label>
+      <v-select name="parent" :options="['Canada', 'United States']" />
 
       <div class="buttons">
         <button @click="ok">OK</button>
@@ -55,7 +57,6 @@ onMounted(() => {
 
 function apply() {
   if (idRef.value === "new") {
-
     addDoc(CategoryColRef, categoryRef.value).then((docRef) => {
       CategoryDocRef = docRef;
       idRef.value = docRef.id;

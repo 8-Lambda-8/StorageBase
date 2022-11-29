@@ -1,8 +1,10 @@
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
+import "vue-select/dist/vue-select.css";
 import "./style.scss";
 import App from "./App.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import vSelect from "vue-select";
 
 const routes = [
   {
@@ -125,5 +127,6 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
+app.component("v-select", vSelect);
 app.use(router);
 app.mount("#app");
