@@ -7,7 +7,7 @@
       <label for="description">Description</label>
       <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
       <label for="parent">Parent Category</label>
-      <v-select name="parent" :options="['Canada', 'United States']" />
+      <v-select name="parent" label="name" :options="categoryTreeRef" />
 
       <div class="buttons">
         <button @click="ok">OK</button>
@@ -19,7 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { addDoc, doc, onSnapshot, setDoc } from "@firebase/firestore";
+import {
+  addDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+  where,
+} from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Category, CategoryColRef, CategoryDocRef } from "../types/types";
@@ -53,6 +62,8 @@ onMounted(() => {
       if (!data) return;
       categoryRef.value = data;
     });
+
+  getCategoriesRecursive(null, -1);
 });
 
 function apply() {
@@ -77,6 +88,24 @@ async function ok() {
 
 function cancel() {
   router.push("/categories");
+}
+
+const categoryTreeRef = ref<{ name: string; docRef: CategoryDocRef }[]>([]);
+
+async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: number) {
+  level++;
+  const qs = await getDocs(
+    query(CategoryColRef, where("parentCategory", "==", parentRef), orderBy("name"))
+  );
+  for (const [i, catDoc] of qs.docs.entries()) {
+    const treeSymbol = level == 0 ? "" : i >= qs.docs.length - 1 ? "└" : "├";
+    categoryTreeRef.value.push({
+      name: "| ".repeat(Math.max(level - 1, 0)) + treeSymbol + catDoc.data().name,
+      docRef: catDoc.ref,
+    });
+    console.log(" |".repeat(level), catDoc.data().name, level);
+    await getCategoriesRecursive(catDoc.ref, level);
+  }
 }
 </script>
 
