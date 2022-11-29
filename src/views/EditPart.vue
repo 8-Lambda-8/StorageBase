@@ -1,19 +1,22 @@
 <template>
   <div class="routerChild">
-    <div class="EditCategory">
-      <h2>Edit Category</h2>
+    <div class="EditPart">
+      <h2>Edit Part</h2>
       <label for="name">Name</label>
-      <input type="text" name="name" v-model="categoryRef.name" maxlength="20" />
+      <input type="text" name="name" v-model="partRef.name" maxlength="20" />
+      <label for="partNr">Part Number</label>
+      <input type="text" name="partNr" v-model="partRef.partNr" />
       <label for="description">Description</label>
-      <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
-      <label for="parent">Parent Category</label>
-      <v-select
-        name="parent"
-        label="name"
-        :options="categoryTreeRef"
-        :reduce="(option:optionInterface)=>option.docRef"
-        v-model="categoryRef.parentCategory"
-      />
+      <input type="text" name="description" v-model="partRef.description" />
+      <label for="category">Category</label>
+      <v-select name="category" v-model="partRef.category" />
+      <label for="footprint">Footprint</label>
+      <v-select name="footprint" v-model="partRef.footprint" />
+      <label for="comment">Comment</label>
+      <textarea type="text" name="comment" v-model="partRef.comment"></textarea>
+
+      <label for="status">Status</label>
+      <input type="text" name="status" v-model="partRef.status" />
 
       <div class="buttons">
         <button @click="ok">OK</button>
@@ -25,29 +28,37 @@
 </template>
 
 <script setup lang="ts">
+import { getAuth } from "@firebase/auth";
 import {
   addDoc,
   doc,
-  getDocs,
   onSnapshot,
-  orderBy,
-  query,
   QueryDocumentSnapshot,
   setDoc,
+  Timestamp,
 } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Category, CategoryColRef, CategoryDocRef } from "../types/types";
+import { Part, PartI, PartColRef, PartDocRef } from "../types/part";
+import { CategoryColRef, FootprintColRef, PartParameterEntry } from "../types/types";
+import { UserColRef } from "../types/user";
 
-let CategoryDocRef: CategoryDocRef;
+let PartDocRef: PartDocRef;
 
-const categoryRef = ref<Category>({
+const partRef = ref<PartI>({
   name: "",
+  partNr: "",
   description: "",
-  parentCategory: null,
+  category: doc(CategoryColRef, "1"),
+  footprint: doc(FootprintColRef, "1"),
+  comment: "",
+  status: "",
+  parameters: new Array<PartParameterEntry>(),
+  lastChange: Timestamp.now(),
+  lastChangeUser: doc(UserColRef, getAuth().currentUser?.uid ?? "1"),
 });
 
-let allCat = [] as QueryDocumentSnapshot<Category>[];
+let allCat = [] as QueryDocumentSnapshot<Part>[];
 
 const idRef = ref("new");
 const router = useRouter();
@@ -56,69 +67,48 @@ onMounted(async () => {
   const id = useRoute().params.id;
 
   if (typeof id !== "string") {
-    router.push("/category");
+    router.push("/Part");
     return;
   }
   idRef.value = id;
 
-  allCat = await (await getDocs(query(CategoryColRef, orderBy("name")))).docs;
-  await getCategoriesRecursive(null, 0);
-
-  CategoryDocRef = doc(CategoryColRef, id);
+  PartDocRef = doc(PartColRef, id);
 
   if (id !== "new" && id.length === 20)
-    onSnapshot(CategoryDocRef, (docSnap) => {
+    onSnapshot(PartDocRef, (docSnap) => {
       const data = docSnap.data();
       if (!data) return;
-      categoryRef.value = data;
+      partRef.value = data;
     });
 });
 
 function apply() {
   if (idRef.value === "new") {
-    addDoc(CategoryColRef, categoryRef.value).then((docRef) => {
-      CategoryDocRef = docRef;
+    addDoc(PartColRef, partRef.value).then((docRef) => {
+      PartDocRef = docRef;
       idRef.value = docRef.id;
-      router.push("/categories/edit/" + docRef.id);
+      router.push("/parts/edit/" + docRef.id);
     });
     return;
   }
 
-  setDoc(CategoryDocRef, categoryRef.value);
+  setDoc(PartDocRef, partRef.value);
 }
 
 async function ok() {
   if (idRef.value === "new") {
-    await addDoc(CategoryColRef, categoryRef.value);
-  } else await setDoc(CategoryDocRef, categoryRef.value);
-  router.push("/categories");
+    await addDoc(PartColRef, partRef.value);
+  } else await setDoc(PartDocRef, partRef.value);
+  router.push("/parts");
 }
 
 function cancel() {
-  router.push("/categories");
-}
-interface optionInterface {
-  name: string;
-  docRef: CategoryDocRef | null;
-}
-const categoryTreeRef = ref<optionInterface[]>([{ name: "Root", docRef: null }]);
-
-async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: number) {
-  level++;
-  const childDocs = allCat.filter((cat) => cat.data().parentCategory?.id == parentRef?.id);
-  for (const [i, catDoc] of childDocs.entries()) {
-    const treeSymbol = level == 0 ? "" : i >= childDocs.length - 1 ? "└" : "├";
-    categoryTreeRef.value.push({
-      name: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
-      docRef: catDoc.ref,
-    });
-    await getCategoriesRecursive(catDoc.ref, level);
-  }
+  router.push("/parts");
 }
 </script>
 
 <style scoped lang="scss">
-.EditCategory {
+.EditPart {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
