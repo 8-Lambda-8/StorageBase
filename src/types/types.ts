@@ -41,6 +41,8 @@ export interface PartParameterEntry {
   parameter: PartParameterDocRef;
   value: number;
   prefix: string;
+  tolerance: number;
+  tolerancePercent:boolean;
 }
 
 export interface Unit {
