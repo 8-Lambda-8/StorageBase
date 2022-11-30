@@ -11,6 +11,7 @@ import { ref } from "vue";
 import { db } from "./firebase";
 import { Category, CategoryColRef, CategoryDocRef } from "./types/types";
 
+// Get SiPrefix and Units
 export interface Lists {
   SiPrefix: Map<string, number>;
   Units: string[];
@@ -28,19 +29,19 @@ getDoc(doc(db, "Lists", "Lists")).then((snap) => {
 export const SiPrefixRef = ref({} as Map<string, number>);
 export const UnitsRef = ref<string[]>([]);
 
+// interface for v-select
 export interface selectOptionI<T> {
-  name: string;
+  label: string;
   docRef: DocumentReference<T> | null;
 }
 
+// load Categories
 export let allCategories = [] as QueryDocumentSnapshot<Category>[];
-export const categoryTreeRef = ref<selectOptionI<Category>[]>([
-  { name: "Root", docRef: null },
-]);
+export const categoryTreeRef = ref<selectOptionI<Category>[]>([{ label: "Root", docRef: null }]);
 
 onSnapshot(query(CategoryColRef, orderBy("name")), (categoryQS) => {
   allCategories = categoryQS.docs;
-  categoryTreeRef.value = [{ name: "Root", docRef: null }];
+  categoryTreeRef.value = [{ label: "Root", docRef: null }];
   getCategoriesRecursive(null, 0);
 });
 
@@ -50,7 +51,7 @@ async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: n
   for (const [i, catDoc] of childDocs.entries()) {
     const treeSymbol = level == 0 ? "" : i >= childDocs.length - 1 ? "└" : "├";
     categoryTreeRef.value.push({
-      name: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
+      label: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
       docRef: catDoc.ref,
     });
     await getCategoriesRecursive(catDoc.ref, level);

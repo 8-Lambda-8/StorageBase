@@ -11,7 +11,6 @@
       <label for="category">Category</label>
       <v-select
         name="category"
-        label="name"
         :options="categoryTreeRef"
         :reduce="(option:selectOptionI<Category>)=>option.docRef"
         v-model="partRef.category"

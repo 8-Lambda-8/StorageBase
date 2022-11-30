@@ -9,7 +9,6 @@
       <label for="parent">Parent Category</label>
       <v-select
         name="parent"
-        label="name"
         :options="categoryTreeRef"
         :reduce="(option:selectOptionI<Category>)=>option.docRef"
         v-model="categoryRef.parentCategory"
