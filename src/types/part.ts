@@ -1,19 +1,15 @@
 import { UserDocRef } from "./user";
 import { CategoryDocRef, FootprintDocRef, PartParameterEntry } from "./types";
 import { Timestamp, CollectionReference, DocumentReference, collection } from "firebase/firestore";
-import {
-  GroupDocRef,
-  StockHistoryEntry,
-  StorageLocationDocRef,
-} from "./types";
+import { GroupDocRef, StockHistoryEntry, StorageLocationDocRef } from "./types";
 import { db } from "../firebase";
 
 export interface PartI {
   name: string;
   partNr: string;
   description: string;
-  category: CategoryDocRef;
-  footprint: FootprintDocRef;
+  category: CategoryDocRef | null;
+  footprint: FootprintDocRef | null;
   comment: string;
   status: string;
   parameters: Array<PartParameterEntry>;

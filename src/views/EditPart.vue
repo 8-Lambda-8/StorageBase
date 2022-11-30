@@ -9,7 +9,13 @@
       <label for="description">Description</label>
       <input type="text" name="description" v-model="partRef.description" />
       <label for="category">Category</label>
-      <v-select name="category" v-model="partRef.category" />
+      <v-select
+        name="category"
+        label="name"
+        :options="categoryTreeRef"
+        :reduce="(option:selectOptionI<Category>)=>option.docRef"
+        v-model="partRef.category"
+      />
       <label for="footprint">Footprint</label>
       <v-select name="footprint" v-model="partRef.footprint" />
       <label for="comment">Comment</label>
@@ -29,18 +35,12 @@
 
 <script setup lang="ts">
 import { getAuth } from "@firebase/auth";
-import {
-  addDoc,
-  doc,
-  onSnapshot,
-  QueryDocumentSnapshot,
-  setDoc,
-  Timestamp,
-} from "@firebase/firestore";
+import { addDoc, doc, onSnapshot, setDoc, Timestamp } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Part, PartI, PartColRef, PartDocRef } from "../types/part";
-import { CategoryColRef, FootprintColRef, PartParameterEntry } from "../types/types";
+import { selectOptionI, categoryTreeRef } from "../staticLists";
+import { PartI, PartColRef, PartDocRef } from "../types/part";
+import { Category, PartParameterEntry } from "../types/types";
 import { UserColRef } from "../types/user";
 
 let PartDocRef: PartDocRef;
@@ -49,16 +49,14 @@ const partRef = ref<PartI>({
   name: "",
   partNr: "",
   description: "",
-  category: doc(CategoryColRef, "1"),
-  footprint: doc(FootprintColRef, "1"),
+  category: null,
+  footprint: null,
   comment: "",
   status: "",
   parameters: new Array<PartParameterEntry>(),
   lastChange: Timestamp.now(),
   lastChangeUser: doc(UserColRef, getAuth().currentUser?.uid ?? "1"),
 });
-
-let allCat = [] as QueryDocumentSnapshot<Part>[];
 
 const idRef = ref("new");
 const router = useRouter();
@@ -85,7 +83,7 @@ onMounted(async () => {
 function apply() {
   if (idRef.value === "new") {
     addDoc(PartColRef, partRef.value).then((docRef) => {
-      PartDocRef = docRef;
+      PartDocRef = docRef as PartDocRef;
       idRef.value = docRef.id;
       router.push("/parts/edit/" + docRef.id);
     });
