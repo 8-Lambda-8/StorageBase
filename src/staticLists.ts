@@ -9,7 +9,13 @@ import {
 } from "firebase/firestore";
 import { ref } from "vue";
 import { db } from "./firebase";
-import { Category, CategoryColRef, CategoryDocRef } from "./types/types";
+import {
+  Category,
+  CategoryColRef,
+  CategoryDocRef,
+  Footprint,
+  FootprintColRef,
+} from "./types/types";
 
 // Get SiPrefix and Units
 export interface Lists {
@@ -57,3 +63,13 @@ async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: n
     await getCategoriesRecursive(catDoc.ref, level);
   }
 }
+
+// load Footprints
+export let allFootprints = [] as QueryDocumentSnapshot<Footprint>[];
+export const footprintRef = ref<selectOptionI<Footprint>[]>([{ label: "None", docRef: null }]);
+
+onSnapshot(query(FootprintColRef, orderBy("name")), (footprintQS) => {
+  allFootprints = footprintQS.docs;
+  footprintRef.value = [{ label: "None", docRef: null }];
+  footprintRef.value.push(...allFootprints.map((f) => ({ label: f.data().name, docRef: f.ref })));
+});

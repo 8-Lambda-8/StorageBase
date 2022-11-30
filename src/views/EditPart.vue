@@ -16,7 +16,12 @@
         v-model="partRef.category"
       />
       <label for="footprint">Footprint</label>
-      <v-select name="footprint" v-model="partRef.footprint" />
+      <v-select
+        name="footprint"
+        :options="footprintRef"
+        :reduce="(option:selectOptionI<Footprint>)=>option.docRef"
+        v-model="partRef.footprint"
+      />
       <label for="comment">Comment</label>
       <textarea type="text" name="comment" v-model="partRef.comment"></textarea>
 
@@ -37,9 +42,9 @@ import { getAuth } from "@firebase/auth";
 import { addDoc, doc, onSnapshot, setDoc, Timestamp } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { selectOptionI, categoryTreeRef } from "../staticLists";
+import { selectOptionI, categoryTreeRef, footprintRef } from "../staticLists";
 import { PartI, PartColRef, PartDocRef } from "../types/part";
-import { Category, PartParameterEntry } from "../types/types";
+import { Category, Footprint, PartParameterEntry } from "../types/types";
 import { UserColRef } from "../types/user";
 
 let PartDocRef: PartDocRef;
