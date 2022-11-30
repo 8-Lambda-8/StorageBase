@@ -54,12 +54,12 @@
                       {{ "Name" }}
                     </td>
                     <td>
+                      <input type="number" name="value" value="10" />
                       <select name="si">
                         <option v-for="si in SiPrefixRef" :selected="si[1] == 0" :value="si">
                           {{ si[0] }}
                         </option>
                       </select>
-                      <input type="number" name="value" value="10" />
                       {{ "Ω" }}
                     </td>
                     <td>
@@ -217,11 +217,6 @@ table {
   tr:nth-child(2) {
     background-color: #00000033;
   }
-
-  select {
-    margin-right: 10px;
-  }
-
   input,
   select {
     background-color: transparent;
