@@ -20,7 +20,7 @@
           <label for="footprint">Footprint</label>
           <v-select
             name="footprint"
-            :options="footprintRef"
+            :options="footprintOptionsRef"
             :reduce="(option:selectOptionI<Footprint>)=>option.docRef"
             v-model="partRef.footprint"
           />
@@ -36,7 +36,12 @@
 
             <label for="parameterType">Add Parameter:</label>
             <div class="addParameter">
-              <v-select name="parameterType" />
+              <v-select
+                name="parameterType"
+                :options="ParametersOptionsRef"
+                :reduce="(option:selectOptionI<PartParameter>)=>option.docRef"
+                v-model="selectedRef"
+              />
               <button>Add</button>
             </div>
             <div>
@@ -90,9 +95,21 @@ import { getAuth } from "@firebase/auth";
 import { addDoc, doc, onSnapshot, setDoc, Timestamp } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { selectOptionI, categoryTreeRef, footprintRef, SiPrefixRef } from "../staticLists";
+import {
+  selectOptionI,
+  categoryTreeRef,
+  footprintOptionsRef,
+  ParametersOptionsRef,
+  SiPrefixRef,
+} from "../staticLists";
 import { PartI, PartColRef, PartDocRef } from "../types/part";
-import { Category, Footprint, PartParameterEntry } from "../types/types";
+import {
+  Category,
+  Footprint,
+  PartParameter,
+  PartParameterDocRef,
+  PartParameterEntry,
+} from "../types/types";
 import { UserColRef } from "../types/user";
 
 let PartDocRef: PartDocRef;
@@ -112,6 +129,8 @@ const partRef = ref<PartI>({
 
 const idRef = ref("new");
 const router = useRouter();
+
+const selectedRef = ref<PartParameterDocRef | null>(null);
 
 onMounted(async () => {
   const id = useRoute().params.id;

@@ -83,12 +83,12 @@ onSnapshot(query(FootprintColRef, orderBy("name")), (footprintQS) => {
 // load Parameters
 export let allParameters = [] as QueryDocumentSnapshot<PartParameter>[];
 export const ParametersOptionsRef = ref<selectOptionI<PartParameter>[]>([
-  { label: "None", docRef: null },
+  { label: "-", docRef: null },
 ]);
 
 onSnapshot(query(PartParameterColRef, orderBy("name")), (parameterQS) => {
   allParameters = parameterQS.docs;
-  ParametersOptionsRef.value = [];
+  ParametersOptionsRef.value = [{ label: "-", docRef: null }];
   ParametersOptionsRef.value.push(
     ...allParameters.map((f) => ({ label: f.data().symbol + " - " + f.data().name, docRef: f.ref }))
   );
