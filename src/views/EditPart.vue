@@ -55,27 +55,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="thisParameter of partRef.parameters">
+                  <tr v-for="param of partRef.parameters">
                     <td>
-                      {{
-                        allParameters.find((p) => p.id === thisParameter.parameter.id)?.data().name
-                      }}
+                      {{ parameterLookup[param.parameter.id].symbol.split("[")[0] }}
+                      <sub v-if="parameterLookup[param.parameter.id].symbol.split('[').length > 1">
+                        {{ parameterLookup[param.parameter.id].symbol.split("[")[1].split("]")[0] }}
+                      </sub>
                     </td>
                     <td>
-                      <input type="number" name="value" v-model="thisParameter.value" />
-                      <select name="si" v-model="thisParameter.prefix">
+                      <input type="number" name="value" v-model="param.value" />
+                      <select name="si" v-model="param.prefix">
                         <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si">
                           {{ si[0] }}
                         </option>
                       </select>
-                      {{
-                        allParameters.find((p) => p.id === thisParameter.parameter.id)?.data().unit
-                      }}
+                      {{ parameterLookup[param.parameter.id].unit }}
                     </td>
                     <td>
                       {{ "±" }}
-                      <input type="number" name="tolerance" v-model="thisParameter.value" />
-                      {{ thisParameter.tolerancePercent ? "%" : "" }}
+                      <input type="number" name="tolerance" v-model="param.tolerance" />
+                      {{ param.tolerancePercent ? "%" : "" }}
                     </td>
                   </tr>
                 </tbody>
@@ -104,7 +103,7 @@ import {
   categoryTreeRef,
   footprintOptionsRef,
   ParametersOptionsRef,
-  allParameters,
+  parameterLookup,
   SiPrefixRef,
 } from "../staticLists";
 import { PartI, PartColRef, PartDocRef } from "../types/part";
