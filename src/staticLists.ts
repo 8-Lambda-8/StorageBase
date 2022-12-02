@@ -15,6 +15,8 @@ import {
   CategoryDocRef,
   Footprint,
   FootprintColRef,
+  PartParameter,
+  PartParameterColRef,
 } from "./types/types";
 
 // Get SiPrefix and Units
@@ -66,10 +68,28 @@ async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: n
 
 // load Footprints
 export let allFootprints = [] as QueryDocumentSnapshot<Footprint>[];
-export const footprintRef = ref<selectOptionI<Footprint>[]>([{ label: "None", docRef: null }]);
+export const footprintOptionsRef = ref<selectOptionI<Footprint>[]>([
+  { label: "None", docRef: null },
+]);
 
 onSnapshot(query(FootprintColRef, orderBy("name")), (footprintQS) => {
   allFootprints = footprintQS.docs;
-  footprintRef.value = [{ label: "None", docRef: null }];
-  footprintRef.value.push(...allFootprints.map((f) => ({ label: f.data().name, docRef: f.ref })));
+  footprintOptionsRef.value = [{ label: "None", docRef: null }];
+  footprintOptionsRef.value.push(
+    ...allFootprints.map((f) => ({ label: f.data().name, docRef: f.ref }))
+  );
+});
+
+// load Parameters
+export let allParameters = [] as QueryDocumentSnapshot<PartParameter>[];
+export const ParametersOptionsRef = ref<selectOptionI<PartParameter>[]>([
+  { label: "None", docRef: null },
+]);
+
+onSnapshot(query(PartParameterColRef, orderBy("name")), (parameterQS) => {
+  allParameters = parameterQS.docs;
+  ParametersOptionsRef.value = [];
+  ParametersOptionsRef.value.push(
+    ...allParameters.map((f) => ({ label: f.data().symbol + " - " + f.data().name, docRef: f.ref }))
+  );
 });
