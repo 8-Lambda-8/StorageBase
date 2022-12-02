@@ -40,9 +40,10 @@
                 name="parameterType"
                 :options="ParametersOptionsRef"
                 :reduce="(option:selectOptionI<PartParameter>)=>option.docRef"
+                x="filter used parameters"
                 v-model="selectedRef"
               />
-              <button>Add</button>
+              <button @click="addParameter">Add</button>
             </div>
             <div>
               <table>
@@ -54,29 +55,32 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr v-for="thisParameter of partRef.parameters">
                     <td>
-                      {{ "Name" }}
+                      {{
+                        allParameters.find((p) => p.id === thisParameter.parameter.id)?.data().name
+                      }}
                     </td>
                     <td>
-                      <input type="number" name="value" value="10" />
-                      <select name="si">
-                        <option v-for="si in SiPrefixRef" :selected="si[1] == 0" :value="si">
+                      <input type="number" name="value" v-model="thisParameter.value" />
+                      <select name="si" v-model="thisParameter.prefix">
+                        <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si">
                           {{ si[0] }}
                         </option>
                       </select>
-                      {{ "Ω" }}
+                      {{
+                        allParameters.find((p) => p.id === thisParameter.parameter.id)?.data().unit
+                      }}
                     </td>
                     <td>
                       {{ "±" }}
-                      <input type="number" name="tolerance" value="2" />
-                      {{ "%" }}
+                      <input type="number" name="tolerance" v-model="thisParameter.value" />
+                      {{ thisParameter.tolerancePercent ? "%" : "" }}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="parameterList"></div>
           </div>
         </div>
       </div>
@@ -100,6 +104,7 @@ import {
   categoryTreeRef,
   footprintOptionsRef,
   ParametersOptionsRef,
+  allParameters,
   SiPrefixRef,
 } from "../staticLists";
 import { PartI, PartColRef, PartDocRef } from "../types/part";
@@ -151,6 +156,21 @@ onMounted(async () => {
     });
 });
 
+function addParameter() {
+  if (selectedRef.value == null) {
+    console.log("cannotAdd");
+    return;
+  }
+
+  partRef.value.parameters.push({
+    parameter: selectedRef.value,
+    value: 0,
+    prefix: "-",
+    tolerance: 0,
+    tolerancePercent: true,
+  } as PartParameterEntry);
+}
+
 function apply() {
   if (idRef.value === "new") {
     addDoc(PartColRef, partRef.value).then((docRef) => {
@@ -197,6 +217,9 @@ function cancel() {
   min-width: 30%;
   margin: 4px;
 }
+.col:last-child {
+  width: 70%;
+}
 .addParameter {
   display: flex;
   flex-direction: row;
@@ -218,6 +241,7 @@ table {
   font-size: 0.9em;
   box-sizing: border-box;
   border-collapse: collapse;
+  width: 100%;
 
   th {
     width: 33%;
@@ -233,7 +257,7 @@ table {
     border-bottom: solid black 3px;
   }
 
-  tr:nth-child(2) {
+  tr:nth-child(2n) {
     background-color: #00000033;
   }
   input,
