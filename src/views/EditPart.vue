@@ -30,7 +30,7 @@
           <label for="status">Status</label>
           <input type="text" name="status" v-model="partRef.status" />
         </div>
-        <div class="col">
+        <div class="col" style="width: 100%;">
           <div class="parameter">
             <h3>Parameters:</h3>
 
@@ -200,7 +200,7 @@ function cancel() {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  width: 30rem;
+  width: 20rem;
   textarea {
     min-height: 5rem;
     resize: vertical;
@@ -209,15 +209,14 @@ function cancel() {
 .columns {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .col {
   display: flex;
   flex-direction: column;
   min-width: 30%;
   margin: 4px;
-}
-.col:last-child {
-  width: 70%;
 }
 .addParameter {
   display: flex;
