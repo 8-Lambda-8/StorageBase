@@ -25,6 +25,15 @@ const routes = [
     component: () => import("./views/Parts.vue"),
   },
   {
+    path: "/parts/edit/:id",
+    name: "Part Editor",
+    meta: {
+      requiresAuth: true,
+      title: "Edit Parts",
+    },
+    component: () => import("./views/EditPart.vue"),
+  },
+  {
     path: "/categories",
     name: "Categories",
     meta: {

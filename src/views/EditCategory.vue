@@ -9,9 +9,8 @@
       <label for="parent">Parent Category</label>
       <v-select
         name="parent"
-        label="name"
         :options="categoryTreeRef"
-        :reduce="(option:optionInterface)=>option.docRef"
+        :reduce="(option:selectOptionI<Category>)=>option.docRef"
         v-model="categoryRef.parentCategory"
       />
 
@@ -37,6 +36,7 @@ import {
 } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { selectOptionI, categoryTreeRef } from "../staticLists";
 import { Category, CategoryColRef, CategoryDocRef } from "../types/types";
 
 let CategoryDocRef: CategoryDocRef;
@@ -60,9 +60,6 @@ onMounted(async () => {
     return;
   }
   idRef.value = id;
-
-  allCat = await (await getDocs(query(CategoryColRef, orderBy("name")))).docs;
-  await getCategoriesRecursive(null, 0);
 
   CategoryDocRef = doc(CategoryColRef, id);
 
@@ -96,24 +93,6 @@ async function ok() {
 
 function cancel() {
   router.push("/categories");
-}
-interface optionInterface {
-  name: string;
-  docRef: CategoryDocRef | null;
-}
-const categoryTreeRef = ref<optionInterface[]>([{ name: "Root", docRef: null }]);
-
-async function getCategoriesRecursive(parentRef: CategoryDocRef | null, level: number) {
-  level++;
-  const childDocs = allCat.filter((cat) => cat.data().parentCategory?.id == parentRef?.id);
-  for (const [i, catDoc] of childDocs.entries()) {
-    const treeSymbol = level == 0 ? "" : i >= childDocs.length - 1 ? "└" : "├";
-    categoryTreeRef.value.push({
-      name: "│ ".repeat(level - 1) + treeSymbol + catDoc.data().name,
-      docRef: catDoc.ref,
-    });
-    await getCategoriesRecursive(catDoc.ref, level);
-  }
 }
 </script>
 
