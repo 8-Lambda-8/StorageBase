@@ -3,18 +3,89 @@
     <div>
       <button @click="newPart">New Part</button>
     </div>
+    <table>
+      <tr>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Part Nr</th>
+        <th>Description</th>
+        <th>Footprint</th>
+        <th>Status</th>
+        <th>Coment</th>
+      </tr>
+      <tr v-for="part of partsDocsRef">
+        <td>{{ allCategories.find((c) => c.id == part.data().category.id)?.data().name }}</td>
+        <td>{{ part.data().name }}</td>
+        <td>{{ part.data().partNr }}</td>
+        <td>{{ part.data().description }}</td>
+        <td>{{ allFootprints.find((f) => f.id == part.data().footprint.id)?.data().name }}</td>
+        <td>{{ part.data().status }}</td>
+        <td>{{ part.data().comment }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { query, orderBy, onSnapshot, QueryDocumentSnapshot, limit } from "@firebase/firestore";
+import { Unsubscribe } from "@firebase/util";
+import { onMounted, onUnmounted, ref } from "vue";
+import { Part, PartColRef } from "../types/part";
+import { allCategories, allFootprints } from "../staticLists";
 
 const router = useRouter();
 
 function newPart() {
   router.push("/parts/edit/new");
 }
+
+const partsDocsRef = ref(new Array<QueryDocumentSnapshot<Part>>());
+
+let unsubscribe: Unsubscribe;
+
+onMounted(() => {
+  const q = query(PartColRef, orderBy("name"), limit(200));
+
+  unsubscribe = onSnapshot(q, (partQS) => {
+    partsDocsRef.value = partQS.docs;
+  });
+});
+
+onUnmounted(() => {
+  unsubscribe();
+});
 </script>
 
 <style scoped lang="scss">
+table {
+  margin-top: 2rem;
+  box-sizing: border-box;
+  border-collapse: collapse;
+
+  td,th {
+    padding: 0.3rem;
+  }
+
+  th:not(:first-child),
+  td:not(:first-child) {
+    border-left: solid gray 1px;
+  }
+
+  tr:has(th) {
+    border-bottom: solid gray 3px;
+    background-color: #000000aa;
+  }
+
+  tr:nth-child(2n) {
+    background-color: #00000033;
+  }
+
+  tr:has(td):hover {
+    background-color: #00000044;
+  }
+  th:hover {
+    background-color: #ffffff44;
+  }
+}
 </style>
