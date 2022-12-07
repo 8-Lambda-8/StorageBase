@@ -24,7 +24,7 @@ export interface StorageLocation {
 }
 export const StorageLocationColRef = collection(
   db,
-  "StorageLocation"
+  "StorageLocation",
 ) as CollectionReference<StorageLocation>;
 export type StorageLocationDocRef = DocumentReference<StorageLocation>;
 
@@ -34,7 +34,10 @@ export interface PartParameter {
   symbol: string;
   unit: Unit;
 }
-export const PartParameterColRef = collection(db, "PartParameter") as CollectionReference<PartParameter>;
+export const PartParameterColRef = collection(
+  db,
+  "PartParameter",
+) as CollectionReference<PartParameter>;
 export type PartParameterDocRef = DocumentReference<PartParameter>;
 
 export interface PartParameterEntry {
@@ -42,7 +45,7 @@ export interface PartParameterEntry {
   value: number;
   prefix: string;
   tolerance: number;
-  tolerancePercent:boolean;
+  tolerancePercent: boolean;
 }
 
 export interface Unit {
@@ -63,7 +66,7 @@ export interface FootprintCategory {
 }
 export const FootprintCategoryColRef = collection(
   db,
-  "FootprintCategory"
+  "FootprintCategory",
 ) as CollectionReference<FootprintCategory>;
 export type FootprintCategoryDocRef = DocumentReference<FootprintCategory>;
 

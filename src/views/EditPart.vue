@@ -30,7 +30,7 @@
           <label for="status">Status</label>
           <input type="text" name="status" v-model="partRef.status" />
         </div>
-        <div class="col" style="width: 100%;">
+        <div class="col" style="width: 100%">
           <div class="parameter">
             <h3>Parameters:</h3>
 

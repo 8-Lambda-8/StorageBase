@@ -27,7 +27,7 @@ enableIndexedDbPersistence(db).catch((err) => {
   }
 });
 
-//Initialize Auth
+// Initialize Auth
 const auth = getAuth();
 
 export const ui = new firebaseui.auth.AuthUI(auth);

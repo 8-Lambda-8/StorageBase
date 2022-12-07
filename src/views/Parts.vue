@@ -63,7 +63,8 @@ table {
   box-sizing: border-box;
   border-collapse: collapse;
 
-  td,th {
+  td,
+  th {
     padding: 0.3rem;
   }
 

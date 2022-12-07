@@ -76,7 +76,7 @@ onSnapshot(query(FootprintColRef, orderBy("name")), (footprintQS) => {
   allFootprints = footprintQS.docs;
   footprintOptionsRef.value = [{ label: "None", docRef: null }];
   footprintOptionsRef.value.push(
-    ...allFootprints.map((f) => ({ label: f.data().name, docRef: f.ref }))
+    ...allFootprints.map((f) => ({ label: f.data().name, docRef: f.ref })),
   );
 });
 
@@ -97,6 +97,6 @@ onSnapshot(query(PartParameterColRef, orderBy("name")), (parameterQS) => {
     ...parameterQS.docs.map((p) => ({
       label: p.data().symbol + " - " + p.data().name,
       docRef: p.ref,
-    }))
+    })),
   );
 });
