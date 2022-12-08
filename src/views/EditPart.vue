@@ -241,14 +241,28 @@ table {
   border-collapse: collapse;
   width: 100%;
 
-  th {
-    width: 33%;
+  th:first-child {
+    width: 25%;
   }
 
   th:not(:first-child),
   td:not(:first-child) {
     border-left: solid black 1px;
     text-align: center;
+  }
+
+  td {
+    input {
+      width: 4rem;
+    }
+    select {
+      width: 1.8rem;
+    }
+  }
+  td:last-child{
+    input {
+      width: 3rem;
+    }
   }
 
   tr:has(th) {
