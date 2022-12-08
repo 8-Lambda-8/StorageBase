@@ -108,7 +108,9 @@ table {
 
   tr:has(th) {
     border-bottom: solid gray 3px;
-    background-color: #000000aa;
+    background-color: #000000;
+    position: sticky;
+    top: -1rem;
   }
 
   tr:nth-child(2n) {
