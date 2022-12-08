@@ -57,10 +57,7 @@
                 <tbody>
                   <tr v-for="param of partRef.parameters">
                     <td>
-                      {{ parameterLookup[param.parameter.id].symbol.split("[")[0] }}
-                      <sub v-if="parameterLookup[param.parameter.id].symbol.split('[').length > 1">
-                        {{ parameterLookup[param.parameter.id].symbol.split("[")[1].split("]")[0] }}
-                      </sub>
+                      <SymbolFormat :paramId="param.parameter.id" />
                     </td>
                     <td>
                       <input type="number" name="value" v-model="param.value" />
@@ -115,6 +112,7 @@ import {
   PartParameterEntry,
 } from "../types/types";
 import { UserColRef } from "../types/user";
+import SymbolFormat from "../components/SymbolFormat.vue";
 
 let PartDocRef: PartDocRef;
 
@@ -259,7 +257,7 @@ table {
       width: 1.8rem;
     }
   }
-  td:last-child{
+  td:last-child {
     input {
       width: 3rem;
     }
