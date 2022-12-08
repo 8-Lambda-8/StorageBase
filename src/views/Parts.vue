@@ -15,11 +15,11 @@
         <th>Actions</th>
       </tr>
       <tr v-for="part of partsDocsRef">
-        <td>{{ allCategories.find((c) => c.id == part.data().category.id)?.data().name }}</td>
+        <td>{{ allCategories.find((c) => c.id == part.data().category?.id)?.data().name }}</td>
         <td>{{ part.data().name }}</td>
         <td>{{ part.data().partNr }}</td>
         <td>{{ part.data().description }}</td>
-        <td>{{ allFootprints.find((f) => f.id == part.data().footprint.id)?.data().name }}</td>
+        <td>{{ allFootprints.find((f) => f.id == part.data().footprint?.id)?.data().name }}</td>
         <td>{{ part.data().status }}</td>
         <td>{{ part.data().comment }}</td>
         <td>
