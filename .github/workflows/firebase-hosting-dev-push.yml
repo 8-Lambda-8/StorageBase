@@ -16,4 +16,5 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STORAGEBASE_4CFB2 }}"
+          channelId: dev
           projectId: storagebase-4cfb2
