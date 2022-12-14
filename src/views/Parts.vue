@@ -68,6 +68,20 @@
           <td>{{ selectedPartRef.data().comment }}</td>
         </tr>
       </table>
+
+      <h3>Parameters:</h3>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+        <tr v-for="parameterEntry of selectedPartRef.data().parameters">
+          <td>{{ parameterLookup[parameterEntry.parameter.id].symbol }}</td>
+          <td>
+            {{ parameterEntry.value + " " + parameterLookup[parameterEntry.parameter.id].unit }}
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -78,7 +92,7 @@ import { query, orderBy, onSnapshot, QueryDocumentSnapshot, limit } from "@fireb
 import { Unsubscribe } from "@firebase/util";
 import { onMounted, onUnmounted, ref } from "vue";
 import { Part, PartColRef } from "../types/part";
-import { allCategories, allFootprints } from "../staticLists";
+import { allCategories, allFootprints, parameterLookup } from "../staticLists";
 
 const router = useRouter();
 
