@@ -2,7 +2,7 @@
   <div class="routerChild">
     <div class="tableWrapper">
       <div>
-        <button @click="newPart">New Part</button>
+        <button @click="editPart('new')">New Part</button>
       </div>
       <table>
         <tr>
@@ -30,6 +30,7 @@
       </table>
     </div>
     <div class="PartSidebar" v-if="selectedPartRef">
+      <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
       <div>
         <h2>
           {{ selectedPartRef.data().name }}
@@ -83,8 +84,8 @@ import { allCategories, allFootprints } from "../staticLists";
 
 const router = useRouter();
 
-function newPart() {
-  router.push("/parts/edit/new");
+function editPart(id: string) {
+  router.push("/parts/edit/" + id);
 }
 
 const partsDocsRef = ref(new Array<QueryDocumentSnapshot<Part>>());
