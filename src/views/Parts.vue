@@ -12,7 +12,6 @@
           <th>Description</th>
           <th>Footprint</th>
           <th>Status</th>
-          <th>Coment</th>
         </tr>
         <tr
           v-for="part of partsDocsRef"
@@ -25,7 +24,6 @@
           <td>{{ part.data().description }}</td>
           <td>{{ allFootprints.find((f) => f.id == part.data().footprint.id)?.data().name }}</td>
           <td>{{ part.data().status }}</td>
-          <td>{{ part.data().comment }}</td>
         </tr>
       </table>
     </div>
