@@ -29,6 +29,8 @@
     </div>
     <div class="PartSidebar" v-if="selectedPartRef">
       <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
+      <button @click="clonePart(selectedPartRef!)">Clone</button>
+      <button @click="deletePart(selectedPartRef?.id ?? '')">Delete</button>
       <div>
         <h2>
           {{ selectedPartRef.data().name }}
@@ -108,14 +110,15 @@ function editPart(id: string) {
 }
 
 function clonePart(part: QueryDocumentSnapshot<Part>) {
+  if (!part) throw new Error("Tried to clone without selection");
   addDoc(PartColRef, part.data()).then((docRef) => {
     editPart(docRef.id);
   });
   return;
 }
 
-function deletePart(id:string){
-  console.log("delete not implemented yet")
+function deletePart(id: string) {
+  console.log("delete not implemented yet");
 }
 
 const partsDocsRef = ref(new Array<QueryDocumentSnapshot<Part>>());
