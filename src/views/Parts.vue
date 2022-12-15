@@ -28,9 +28,11 @@
       </table>
     </div>
     <div class="PartSidebar" v-if="selectedPartRef">
-      <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
-      <button @click="clonePart(selectedPartRef!)">Clone</button>
-      <button @click="deletePart(selectedPartRef?.id ?? '')">Delete</button>
+      <span>
+        <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
+        <button @click="clonePart(selectedPartRef!)">Clone</button>
+        <button @click="deletePart(selectedPartRef?.id ?? '')">Delete</button>
+      </span>
       <div>
         <h2>
           {{ selectedPartRef.data().name }}
@@ -196,6 +198,14 @@ onUnmounted(() => {
   width: 300px;
   padding: 1rem;
   background-color: #1c1c1c;
+
+  span{
+    display: grid;
+    grid-template-columns: 33% auto auto;
+    button{
+      padding: .5rem;
+    }
+  }
 
   div {
     margin: 1rem -1rem;
