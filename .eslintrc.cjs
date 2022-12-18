@@ -23,6 +23,7 @@ module.exports = {
   ignorePatterns: [
     "/dist/**/*", // Ignore built files.
     "/functions/lib/**/*", // Ignore built files.
+    ".eslintrc.cjs"
   ],
   plugins: ["@typescript-eslint", "import"],
   rules: {
