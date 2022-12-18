@@ -174,7 +174,7 @@ onUnmounted(() => {
       box-shadow: inset 0 -3px gray;
       background-color: #111;
       position: sticky;
-      top: -1rem;
+      top: 0rem;
     }
 
     tr:nth-child(2n) {
