@@ -13,14 +13,16 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:vue/vue3-recommended",
   ],
-  parser: "@typescript-eslint/parser",
+  parser: "vue-eslint-parser",
   parserOptions: {
+    parser: "@typescript-eslint/parser",
     project: ["tsconfig.json", "functions/tsconfig.json"],
     sourceType: "module",
+    extraFileExtensions: [".vue"],
   },
   ignorePatterns: [
-    "/functions/**/*", // Ignore functions.
     "/dist/**/*", // Ignore built files.
+    "/functions/lib/**/*", // Ignore built files.
   ],
   plugins: ["@typescript-eslint", "import"],
   rules: {
