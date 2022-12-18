@@ -253,7 +253,7 @@ table {
       width: 4rem;
     }
     select {
-      width: 1.8rem;
+      width: 2rem;
     }
   }
   td:last-child {
