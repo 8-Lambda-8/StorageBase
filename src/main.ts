@@ -102,7 +102,7 @@ export const getCurrentUser = () => {
         removeListener();
         resolve(user);
       },
-      reject
+      reject,
     );
   });
 };
@@ -119,14 +119,14 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.matched.some((r) => r.meta.requiresAuth)) {
-    //Auth required
+    // Auth required
     if (await getCurrentUser()) {
       next();
     } else {
       next("/login");
     }
   } else if (to.matched.some((r) => r.name === "Login")) {
-    //Login
+    // Login
     if (await getCurrentUser()) next(from); // go back if logged in
 
     if (from.path === "/login") next("/");
@@ -136,6 +136,6 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
-app.component("v-select", vSelect);
+app.component("VSelect", vSelect);
 app.use(router);
 app.mount("#app");

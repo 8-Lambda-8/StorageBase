@@ -1,7 +1,13 @@
 import { UserDocRef } from "./user";
-import { CategoryDocRef, FootprintDocRef, PartParameterEntry } from "./types";
+import {
+  CategoryDocRef,
+  FootprintDocRef,
+  PartParameterEntry,
+  GroupDocRef,
+  StockHistoryEntry,
+  StorageLocationDocRef,
+} from "./types";
 import { Timestamp, CollectionReference, DocumentReference, collection } from "firebase/firestore";
-import { GroupDocRef, StockHistoryEntry, StorageLocationDocRef } from "./types";
 import { db } from "../firebase";
 
 export interface PartI {
@@ -39,7 +45,7 @@ export class Part {
     footprint: FootprintDocRef,
     lastChange: Timestamp,
     lastChangeUser: UserDocRef,
-    category: CategoryDocRef
+    category: CategoryDocRef,
   ) {
     this.name = name;
     this.partNr = partNr;
@@ -78,7 +84,7 @@ export class StoredPart {
     storageLocation: StorageLocationDocRef,
     stock: number,
     minStock: number,
-    price: number
+    price: number,
   ) {
     this.part = part;
     this.owner = owner;

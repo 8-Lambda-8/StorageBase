@@ -2,6 +2,7 @@ import { GroupDocRef } from "./types";
 import { UserDocRef } from "./user";
 import { StoredPartDocRef } from "./part";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Project {
   name: string;
   description: string;

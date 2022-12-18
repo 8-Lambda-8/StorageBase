@@ -19,7 +19,6 @@ import { UserI } from "../types/user";
 defineProps<{
   user: UserI;
 }>();
-
 </script>
 
 <style scoped lang="scss">

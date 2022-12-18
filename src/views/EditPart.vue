@@ -30,7 +30,7 @@
           <label for="status">Status</label>
           <input type="text" name="status" v-model="partRef.status" />
         </div>
-        <div class="col" style="width: 100%;">
+        <div class="col" style="width: 100%">
           <div class="parameter">
             <h3>Parameters:</h3>
 
@@ -57,15 +57,12 @@
                 <tbody>
                   <tr v-for="param of partRef.parameters">
                     <td>
-                      {{ parameterLookup[param.parameter.id].symbol.split("[")[0] }}
-                      <sub v-if="parameterLookup[param.parameter.id].symbol.split('[').length > 1">
-                        {{ parameterLookup[param.parameter.id].symbol.split("[")[1].split("]")[0] }}
-                      </sub>
+                      <SymbolFormat :paramId="param.parameter.id" />
                     </td>
                     <td>
                       <input type="number" name="value" v-model="param.value" />
                       <select name="si" v-model="param.prefix">
-                        <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si">
+                        <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si[0]">
                           {{ si[0] }}
                         </option>
                       </select>
@@ -115,6 +112,7 @@ import {
   PartParameterEntry,
 } from "../types/types";
 import { UserColRef } from "../types/user";
+import SymbolFormat from "../components/SymbolFormat.vue";
 
 let PartDocRef: PartDocRef;
 
@@ -235,20 +233,33 @@ function cancel() {
 }
 
 table {
-  color: black;
   font-size: 0.9em;
   box-sizing: border-box;
   border-collapse: collapse;
   width: 100%;
 
-  th {
-    width: 33%;
+  th:first-child {
+    width: 25%;
   }
 
   th:not(:first-child),
   td:not(:first-child) {
     border-left: solid black 1px;
     text-align: center;
+  }
+
+  td {
+    input {
+      width: 4rem;
+    }
+    select {
+      width: 2rem;
+    }
+  }
+  td:last-child {
+    input {
+      width: 3rem;
+    }
   }
 
   tr:has(th) {

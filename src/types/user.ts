@@ -51,19 +51,21 @@ export interface UserI {
   userSettings: UserSettings;
 }
 
-interface UserSettings {}
+interface UserSettings {
+  dummy?: string;
+}
 
 export const UserColRef = collection(db, "User") as CollectionReference<User>;
 export type UserDocRef = DocumentReference<User>;
 
-//Permission Classes
+// Permission Classes
 //
-//0:no Permissions	                  No User
-//1:ro		                            Spectator
-//2:create and edit own(default)	    User
-//3:create and edit of lower users 	  KeyUser
-//4:admin 	                          Admin
-//5:superAdmin                        Root
+// 0:no Permissions                   No User
+// 1:ro                               Spectator
+// 2:create and edit own(default)     User
+// 3:create and edit of lower users   KeyUser
+// 4:admin                            Admin
+// 5:superAdmin                       Root
 
 export const userDataRef = ref<UserI>({
   name: "",
