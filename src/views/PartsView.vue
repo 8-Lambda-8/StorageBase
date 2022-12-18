@@ -15,8 +15,9 @@
         </tr>
         <tr
           v-for="part of partsDocsRef"
-          @click="selectedPartRef = part"
+          :key="part.id"
           :class="part === selectedPartRef ? 'selectedRow' : ''"
+          @click="selectedPartRef = part"
         >
           <td>{{ allCategories.find((c) => c.id == part.data().category.id)?.data().name }}</td>
           <td>{{ part.data().name }}</td>
@@ -27,7 +28,10 @@
         </tr>
       </table>
     </div>
-    <div class="PartSidebar" v-if="selectedPartRef">
+    <div
+      v-if="selectedPartRef"
+      class="PartSidebar"
+    >
       <span>
         <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
         <button @click="clonePart(selectedPartRef!)">Clone</button>
@@ -79,14 +83,17 @@
           <th>Name</th>
           <th>Value</th>
         </tr>
-        <tr v-for="parameterEntry of selectedPartRef.data().parameters">
-          <td><SymbolFormat :paramId="parameterEntry.parameter.id" /></td>
+        <tr
+          v-for="parameterEntry of selectedPartRef.data().parameters"
+          :key="selectedPartRef.id + '_' + parameterEntry.parameter.id"
+        >
+          <td><SymbolFormat :param-id="parameterEntry.parameter.id" /></td>
           <td>
             {{
               parameterEntry.value +
-              " " +
-              parameterEntry.prefix.replace("-", "") +
-              parameterLookup[parameterEntry.parameter.id].unit
+                " " +
+                parameterEntry.prefix.replace("-", "") +
+                parameterLookup[parameterEntry.parameter.id].unit
             }}
           </td>
         </tr>
@@ -125,6 +132,7 @@ function clonePart(part: QueryDocumentSnapshot<Part>) {
   return;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function deletePart(id: string) {
   console.log("delete not implemented yet");
 }

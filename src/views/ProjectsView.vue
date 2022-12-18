@@ -1,5 +1,7 @@
 <template>
-  <div class="routerChild">Projects</div>
+  <div class="routerChild">
+    Projects
+  </div>
 </template>
 
 <script setup lang="ts">

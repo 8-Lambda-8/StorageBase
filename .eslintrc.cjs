@@ -32,5 +32,13 @@ module.exports = {
     "max-len": ["error", { code: 100 }],
     "require-jsdoc": ["off"],
     "indent": ["error", 2, { ignoredNodes: ["PropertyDefinition"] }],
+    "vue/singleline-html-element-content-newline": [
+      "error",
+      {
+        ignoreWhenNoAttributes: true,
+        ignoreWhenEmpty: true,
+        ignores: ["pre", "textarea", "button", "label", "router-link"],
+      },
+    ],
   },
 };

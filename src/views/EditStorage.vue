@@ -2,15 +2,34 @@
   <div class="routerChild">
     <div class="EditStorage">
       <h2>Edit Storage Location</h2>
-      <label for="name">Name</label>
-      <input type="text" name="name" v-model="storageRef.name" maxlength="20" />
-      <label for="description">Description</label>
-      <textarea type="text" name="description" v-model="storageRef.description"></textarea>
+      <label for="name">
+        Name
+      </label>
+      <input
+        v-model="storageRef.name"
+        type="text"
+        name="name"
+        maxlength="20"
+      >
+      <label for="description">
+        Description
+      </label>
+      <textarea
+        v-model="storageRef.description"
+        type="text"
+        name="description"
+      />
 
       <div class="buttons">
-        <button @click="ok">OK</button>
-        <button @click="cancel">Cancel</button>
-        <button @click="apply">Apply</button>
+        <button @click="ok">
+          OK
+        </button>
+        <button @click="cancel">
+          Cancel
+        </button>
+        <button @click="apply">
+          Apply
+        </button>
       </div>
     </div>
   </div>
@@ -47,12 +66,13 @@ onMounted(() => {
 
   SLDocRef = doc(StorageLocationColRef, id);
 
-  if (id !== "new" && id.length === 20)
+  if (id !== "new" && id.length === 20) {
     onSnapshot(SLDocRef, (docSnap) => {
       const data = docSnap.data();
       if (!data) return;
       storageRef.value = data;
     });
+  }
 });
 
 function apply() {

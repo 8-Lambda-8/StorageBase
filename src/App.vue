@@ -34,12 +34,26 @@ function toggleUserCard() {
 
 <template>
   <header>
-    <img class="logo" src="/storagebase.svg" />
+    <img
+      class="logo"
+      src="/storagebase.svg"
+    >
     <h1>StorageBase</h1>
-    <button href="" class="userBubble" @click="toggleUserCard()" :disabled="userDataRef.name == ''">
-      <img v-bind:src="userDataRef.imgUrl" alt="User Picture" />
+    <button
+      href=""
+      class="userBubble"
+      :disabled="userDataRef.name == ''"
+      @click="toggleUserCard()"
+    >
+      <img
+        :src="userDataRef.imgUrl"
+        alt="User Picture"
+      >
     </button>
-    <UserCard v-if="userCardExtended" :user="userDataRef" />
+    <UserCard
+      v-if="userCardExtended"
+      :user="userDataRef"
+    />
   </header>
   <div>
     <nav v-if="isLogedIn">

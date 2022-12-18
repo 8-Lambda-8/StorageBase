@@ -22,7 +22,7 @@ const routes = [
       requiresAuth: true,
       title: "Parts",
     },
-    component: () => import("./views/Parts.vue"),
+    component: () => import("./views/PartsView.vue"),
   },
   {
     path: "/parts/edit/:id",
@@ -40,7 +40,7 @@ const routes = [
       requiresAuth: true,
       title: "Categories",
     },
-    component: () => import("./views/Categories.vue"),
+    component: () => import("./views/CategoriesView.vue"),
   },
   {
     path: "/categories/edit/:id",
@@ -58,7 +58,7 @@ const routes = [
       requiresAuth: true,
       title: "Storage Locations",
     },
-    component: () => import("./views/Storage.vue"),
+    component: () => import("./views/StorageView.vue"),
   },
   {
     path: "/storage/edit/:id",
@@ -76,7 +76,7 @@ const routes = [
       requiresAuth: true,
       title: "Projects",
     },
-    component: () => import("./views/Projects.vue"),
+    component: () => import("./views/ProjectsView.vue"),
   },
   {
     path: "/login",
@@ -84,7 +84,7 @@ const routes = [
     meta: {
       title: "Login",
     },
-    component: () => import("./views/Login.vue"),
+    component: () => import("./views/LoginView.vue"),
   },
 ];
 

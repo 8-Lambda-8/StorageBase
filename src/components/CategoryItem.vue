@@ -3,11 +3,15 @@
     <h4>
       {{ category.name }}
     </h4>
-    <a v-if="userDataRef.permissionLevel > 3" :href="'/categories/edit/' + id">edit</a>
+    <a
+      v-if="userDataRef.permissionLevel > 3"
+      :href="'/categories/edit/' + id"
+    >edit</a>
     <CategoryItem
       v-for="categoryLocationDoc in categoriesDocsRef"
-      :category="categoryLocationDoc.data()"
       :id="categoryLocationDoc.id"
+      :key="categoryLocationDoc.id"
+      :category="categoryLocationDoc.data()"
     />
   </div>
 </template>
@@ -32,7 +36,7 @@ onMounted(() => {
   const q = query(
     CategoryColRef,
     where("parentCategory", "==", doc(CategoryColRef, props.id)),
-    orderBy("name")
+    orderBy("name"),
   );
 
   unsubscribe = onSnapshot(q, (categoryQS) => {

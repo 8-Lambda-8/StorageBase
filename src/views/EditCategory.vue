@@ -3,15 +3,24 @@
     <div class="EditCategory">
       <h2>Edit Category</h2>
       <label for="name">Name</label>
-      <input type="text" name="name" v-model="categoryRef.name" maxlength="20" />
+      <input
+        v-model="categoryRef.name"
+        type="text"
+        name="name"
+        maxlength="20"
+      >
       <label for="description">Description</label>
-      <textarea type="text" name="description" v-model="categoryRef.description"></textarea>
+      <textarea
+        v-model="categoryRef.description"
+        type="text"
+        name="description"
+      />
       <label for="parent">Parent Category</label>
       <v-select
+        v-model="categoryRef.parentCategory"
         name="parent"
         :options="categoryTreeRef"
         :reduce="(option:selectOptionI<Category>)=>option.docRef"
-        v-model="categoryRef.parentCategory"
       />
 
       <div class="buttons">
@@ -24,30 +33,20 @@
 </template>
 
 <script setup lang="ts">
-import {
-  addDoc,
-  doc,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-  QueryDocumentSnapshot,
-  setDoc,
-} from "@firebase/firestore";
+import { addDoc, doc, onSnapshot, setDoc } from "@firebase/firestore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { selectOptionI, categoryTreeRef } from "../staticLists";
 import { Category, CategoryColRef, CategoryDocRef } from "../types/types";
 
-let CategoryDocRef: CategoryDocRef;
+let thisCategoryDocRef: CategoryDocRef;
 
 const categoryRef = ref<Category>({
   name: "",
   description: "",
   parentCategory: null,
 });
-
-let allCat = [] as QueryDocumentSnapshot<Category>[];
 
 const idRef = ref("new");
 const router = useRouter();
@@ -61,33 +60,34 @@ onMounted(async () => {
   }
   idRef.value = id;
 
-  CategoryDocRef = doc(CategoryColRef, id);
+  thisCategoryDocRef = doc(CategoryColRef, id);
 
-  if (id !== "new" && id.length === 20)
-    onSnapshot(CategoryDocRef, (docSnap) => {
+  if (id !== "new" && id.length === 20) {
+    onSnapshot(thisCategoryDocRef, (docSnap) => {
       const data = docSnap.data();
       if (!data) return;
       categoryRef.value = data;
     });
+  }
 });
 
 function apply() {
   if (idRef.value === "new") {
     addDoc(CategoryColRef, categoryRef.value).then((docRef) => {
-      CategoryDocRef = docRef;
+      thisCategoryDocRef = docRef;
       idRef.value = docRef.id;
       router.push("/categories/edit/" + docRef.id);
     });
     return;
   }
 
-  setDoc(CategoryDocRef, categoryRef.value);
+  setDoc(thisCategoryDocRef, categoryRef.value);
 }
 
 async function ok() {
   if (idRef.value === "new") {
     await addDoc(CategoryColRef, categoryRef.value);
-  } else await setDoc(CategoryDocRef, categoryRef.value);
+  } else await setDoc(thisCategoryDocRef, categoryRef.value);
   router.push("/categories");
 }
 
