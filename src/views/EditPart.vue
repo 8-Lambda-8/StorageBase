@@ -62,7 +62,7 @@
                     <td>
                       <input type="number" name="value" v-model="param.value" />
                       <select name="si" v-model="param.prefix">
-                        <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si">
+                        <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si[0]">
                           {{ si[0] }}
                         </option>
                       </select>
