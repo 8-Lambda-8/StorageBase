@@ -6,6 +6,7 @@ import { UserColRef, userDataRef } from "./types/user";
 import { doc, onSnapshot } from "@firebase/firestore";
 
 import UserCard from "./components/UserCard.vue";
+import ModalDialog from "./components/ModalDialog.vue";
 
 const isLogedIn = ref(false);
 const userCardExtended = ref(false);
@@ -65,6 +66,7 @@ function toggleUserCard() {
     </nav>
     <router-view />
   </div>
+  <ModalDialog />
 </template>
 
 <style scoped lang="scss">

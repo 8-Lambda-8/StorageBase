@@ -35,7 +35,7 @@
       <span>
         <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
         <button @click="clonePart(selectedPartRef!)">Clone</button>
-        <button @click="deletePart(selectedPartRef?.id ?? '')">Delete</button>
+        <button @click="deletePart(selectedPartRef!)">Delete</button>
       </span>
       <div>
         <h2>
@@ -111,12 +111,14 @@ import {
   QueryDocumentSnapshot,
   limit,
   addDoc,
+  deleteDoc,
 } from "@firebase/firestore";
 import { Unsubscribe } from "@firebase/util";
 import { onMounted, onUnmounted, ref } from "vue";
 import { Part, PartColRef } from "../types/part";
 import { allCategories, allFootprints, parameterLookup } from "../staticLists";
 import SymbolFormat from "../components/SymbolFormat.vue";
+import { showModalDialog } from "../modalDialogStatic";
 
 const router = useRouter();
 
@@ -133,8 +135,17 @@ function clonePart(part: QueryDocumentSnapshot<Part>) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function deletePart(id: string) {
-  console.log("delete not implemented yet");
+function deletePart(part: QueryDocumentSnapshot<Part>) {
+  showModalDialog(
+    "Delete Part?",
+    part.data().name + " " + part.data().partNr,
+    () => {
+      deleteDoc(part.ref);
+    },
+    "DELETE",
+    undefined,
+    "CANCEL",
+  );
 }
 
 const partsDocsRef = ref(new Array<QueryDocumentSnapshot<Part>>());
