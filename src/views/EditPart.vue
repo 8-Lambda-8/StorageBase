@@ -233,7 +233,6 @@ function cancel() {
 }
 
 table {
-  color: black;
   font-size: 0.9em;
   box-sizing: border-box;
   border-collapse: collapse;
