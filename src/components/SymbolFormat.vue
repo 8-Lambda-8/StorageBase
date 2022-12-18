@@ -8,7 +8,6 @@
 <script setup lang="ts">
 import { parameterLookup } from "../staticLists";
 
-console.log("asd_____-");
 const props = defineProps<{
   paramId: string;
 }>();

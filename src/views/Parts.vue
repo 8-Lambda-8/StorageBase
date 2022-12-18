@@ -80,9 +80,14 @@
           <th>Value</th>
         </tr>
         <tr v-for="parameterEntry of selectedPartRef.data().parameters">
-          <td>{{ parameterLookup[parameterEntry.parameter.id].symbol }}</td>
+          <td><SymbolFormat :paramId="parameterEntry.parameter.id" /></td>
           <td>
-            {{ parameterEntry.value + " " + parameterLookup[parameterEntry.parameter.id].unit }}
+            {{
+              parameterEntry.value +
+              " " +
+              parameterEntry.prefix.replace("-", "") +
+              parameterLookup[parameterEntry.parameter.id].unit
+            }}
           </td>
         </tr>
       </table>
@@ -104,6 +109,7 @@ import { Unsubscribe } from "@firebase/util";
 import { onMounted, onUnmounted, ref } from "vue";
 import { Part, PartColRef } from "../types/part";
 import { allCategories, allFootprints, parameterLookup } from "../staticLists";
+import SymbolFormat from "../components/SymbolFormat.vue";
 
 const router = useRouter();
 
@@ -199,11 +205,11 @@ onUnmounted(() => {
   padding: 1rem;
   background-color: #1c1c1c;
 
-  span{
+  span {
     display: grid;
     grid-template-columns: 33% auto auto;
-    button{
-      padding: .5rem;
+    button {
+      padding: 0.5rem;
     }
   }
 
