@@ -6,8 +6,9 @@
     <div>
       <StorageItem
         v-for="storageLocationDoc in storageLocationsDocsRef"
-        :storage-location="storageLocationDoc.data()"
         :id="storageLocationDoc.id"
+        :key="storageLocationDoc.id"
+        :storage-location="storageLocationDoc.data()"
       />
     </div>
   </div>
@@ -47,7 +48,7 @@ onMounted(() => {
     const q = query(
       StorageLocationColRef,
       where("owner", "==", doc(UserColRef, user?.uid ?? "1")),
-      orderBy("name")
+      orderBy("name"),
     );
 
     unsubscribe = onSnapshot(q, (storageLocationQS) => {

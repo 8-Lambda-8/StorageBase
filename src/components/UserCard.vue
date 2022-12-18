@@ -1,14 +1,16 @@
 <template>
   <div class="userCard">
-    <img v-bind:src="user?.imgUrl" />
+    <img :src="user?.imgUrl">
     <div>
       <p>{{ user?.name }}</p>
       <p>PermissionLevel:{{ user?.permissionLevel }}</p>
     </div>
 
-    <div></div>
+    <div />
     <!-- <button @click="useRouter().push("/settings")">Settings</button> -->
-    <button @click="getAuth().signOut()">LogOut</button>
+    <button @click="getAuth().signOut()">
+      LogOut
+    </button>
   </div>
 </template>
 

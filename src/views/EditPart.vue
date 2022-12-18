@@ -4,44 +4,68 @@
       <h2>Edit Part</h2>
       <div class="columns">
         <div class="col">
-          <label for="name">Name</label>
-          <input type="text" name="name" v-model="partRef.name" maxlength="20" />
-          <label for="partNr">Part Number</label>
-          <input type="text" name="partNr" v-model="partRef.partNr" />
-          <label for="description">Description</label>
-          <input type="text" name="description" v-model="partRef.description" />
-          <label for="category">Category</label>
+          <label for="name"> Name </label>
+          <input
+            v-model="partRef.name"
+            type="text"
+            name="name"
+            maxlength="20"
+          >
+          <label for="partNr"> Part Number </label>
+          <input
+            v-model="partRef.partNr"
+            type="text"
+            name="partNr"
+          >
+          <label for="description"> Description </label>
+          <input
+            v-model="partRef.description"
+            type="text"
+            name="description"
+          >
+          <label for="category"> Category </label>
           <v-select
+            v-model="partRef.category"
             name="category"
             :options="categoryTreeRef"
             :reduce="(option:selectOptionI<Category>)=>option.docRef"
-            v-model="partRef.category"
           />
-          <label for="footprint">Footprint</label>
+          <label for="footprint"> Footprint </label>
           <v-select
+            v-model="partRef.footprint"
             name="footprint"
             :options="footprintOptionsRef"
             :reduce="(option:selectOptionI<Footprint>)=>option.docRef"
-            v-model="partRef.footprint"
           />
-          <label for="comment">Comment</label>
-          <textarea type="text" name="comment" v-model="partRef.comment"></textarea>
+          <label for="comment"> Comment </label>
+          <textarea
+            v-model="partRef.comment"
+            type="text"
+            name="comment"
+          />
 
-          <label for="status">Status</label>
-          <input type="text" name="status" v-model="partRef.status" />
+          <label for="status"> Status </label>
+          <input
+            v-model="partRef.status"
+            type="text"
+            name="status"
+          >
         </div>
-        <div class="col" style="width: 100%">
+        <div
+          class="col"
+          style="width: 100%"
+        >
           <div class="parameter">
             <h3>Parameters:</h3>
 
-            <label for="parameterType">Add Parameter:</label>
+            <label for="parameterType"> Add Parameter: </label>
             <div class="addParameter">
               <v-select
+                v-model="selectedRef"
                 name="parameterType"
                 :options="ParametersOptionsRef"
                 :reduce="(option:selectOptionI<PartParameter>)=>option.docRef"
                 x="filter used parameters"
-                v-model="selectedRef"
               />
               <button @click="addParameter">Add</button>
             </div>
@@ -55,14 +79,29 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="param of partRef.parameters">
+                  <tr
+                    v-for="param of partRef.parameters"
+                    :key="param.parameter.id"
+                  >
                     <td>
-                      <SymbolFormat :paramId="param.parameter.id" />
+                      <SymbolFormat :param-id="param.parameter.id" />
                     </td>
                     <td>
-                      <input type="number" name="value" v-model="param.value" />
-                      <select name="si" v-model="param.prefix">
-                        <option v-for="si in SiPrefixRef" :selected="si[0] == '-'" :value="si[0]">
+                      <input
+                        v-model="param.value"
+                        type="number"
+                        name="value"
+                      >
+                      <select
+                        v-model="param.prefix"
+                        name="si"
+                      >
+                        <option
+                          v-for="si in SiPrefixRef"
+                          :key="si[0]"
+                          :selected="si[0] == '-'"
+                          :value="si[0]"
+                        >
                           {{ si[0] }}
                         </option>
                       </select>
@@ -70,7 +109,11 @@
                     </td>
                     <td>
                       {{ "±" }}
-                      <input type="number" name="tolerance" v-model="param.tolerance" />
+                      <input
+                        v-model="param.tolerance"
+                        type="number"
+                        name="tolerance"
+                      >
                       {{ param.tolerancePercent ? "%" : "" }}
                     </td>
                   </tr>
@@ -96,6 +139,7 @@ import { addDoc, doc, onSnapshot, setDoc, Timestamp } from "@firebase/firestore"
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   selectOptionI,
   categoryTreeRef,
   footprintOptionsRef,
@@ -105,8 +149,11 @@ import {
 } from "../staticLists";
 import { PartI, PartColRef, PartDocRef } from "../types/part";
 import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Category,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Footprint,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   PartParameter,
   PartParameterDocRef,
   PartParameterEntry,
@@ -114,7 +161,7 @@ import {
 import { UserColRef } from "../types/user";
 import SymbolFormat from "../components/SymbolFormat.vue";
 
-let PartDocRef: PartDocRef;
+let thisPartDocRef: PartDocRef;
 
 const partRef = ref<PartI>({
   name: "",
@@ -143,14 +190,15 @@ onMounted(async () => {
   }
   idRef.value = id;
 
-  PartDocRef = doc(PartColRef, id);
+  thisPartDocRef = doc(PartColRef, id);
 
-  if (id !== "new" && id.length === 20)
-    onSnapshot(PartDocRef, (docSnap) => {
+  if (id !== "new" && id.length === 20) {
+    onSnapshot(thisPartDocRef, (docSnap) => {
       const data = docSnap.data();
       if (!data) return;
       partRef.value = data;
     });
+  }
 });
 
 function addParameter() {
@@ -171,20 +219,20 @@ function addParameter() {
 function apply() {
   if (idRef.value === "new") {
     addDoc(PartColRef, partRef.value).then((docRef) => {
-      PartDocRef = docRef as PartDocRef;
+      thisPartDocRef = docRef as PartDocRef;
       idRef.value = docRef.id;
       router.push("/parts/edit/" + docRef.id);
     });
     return;
   }
 
-  setDoc(PartDocRef, partRef.value);
+  setDoc(thisPartDocRef, partRef.value);
 }
 
 async function ok() {
   if (idRef.value === "new") {
     await addDoc(PartColRef, partRef.value);
-  } else await setDoc(PartDocRef, partRef.value);
+  } else await setDoc(thisPartDocRef, partRef.value);
   router.push("/parts");
 }
 

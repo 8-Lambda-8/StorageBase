@@ -6,6 +6,7 @@ import { UserColRef, userDataRef } from "./types/user";
 import { doc, onSnapshot } from "@firebase/firestore";
 
 import UserCard from "./components/UserCard.vue";
+import ModalDialog from "./components/ModalDialog.vue";
 
 const isLogedIn = ref(false);
 const userCardExtended = ref(false);
@@ -34,12 +35,26 @@ function toggleUserCard() {
 
 <template>
   <header>
-    <img class="logo" src="/storagebase.svg" />
+    <img
+      class="logo"
+      src="/storagebase.svg"
+    >
     <h1>StorageBase</h1>
-    <button href="" class="userBubble" @click="toggleUserCard()" :disabled="userDataRef.name == ''">
-      <img v-bind:src="userDataRef.imgUrl" alt="User Picture" />
+    <button
+      href=""
+      class="userBubble"
+      :disabled="userDataRef.name == ''"
+      @click="toggleUserCard()"
+    >
+      <img
+        :src="userDataRef.imgUrl"
+        alt="User Picture"
+      >
     </button>
-    <UserCard v-if="userCardExtended" :user="userDataRef" />
+    <UserCard
+      v-if="userCardExtended"
+      :user="userDataRef"
+    />
   </header>
   <div>
     <nav v-if="isLogedIn">
@@ -51,6 +66,7 @@ function toggleUserCard() {
     </nav>
     <router-view />
   </div>
+  <ModalDialog />
 </template>
 
 <style scoped lang="scss">

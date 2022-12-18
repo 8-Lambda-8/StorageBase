@@ -6,7 +6,9 @@
     <div>
       {{ storageLocation.description }}
     </div>
-    <a :href="'/storage/edit/' + id">edit</a>
+    <a :href="'/storage/edit/' + id">
+      edit
+    </a>
   </div>
 </template>
 

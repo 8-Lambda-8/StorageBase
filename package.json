@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "eslint . --ext .ts -c .eslintrc.cjs",
+    "lint": "eslint . --ext .ts,.js,.vue -c .eslintrc.cjs",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
@@ -27,6 +27,7 @@
     "sass": "^1.56.1",
     "typescript": "^4.6.4",
     "vite": "^3.0.0",
+    "vue-eslint-parser": "^9.1.0",
     "vue-tsc": "^0.38.4"
   }
 }

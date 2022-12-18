@@ -1,13 +1,16 @@
 <template>
   <div class="routerChild">
     <div v-if="userDataRef.permissionLevel > 3">
-      <button @click="newCategory">New Category</button>
+      <button @click="newCategory">
+        New Category
+      </button>
     </div>
     <div>
       <CategoryItem
         v-for="categoryLocationDoc in categoriesDocsRef"
-        :category="categoryLocationDoc.data()"
         :id="categoryLocationDoc.id"
+        :key="categoryLocationDoc.id"
+        :category="categoryLocationDoc.data()"
       />
     </div>
   </div>

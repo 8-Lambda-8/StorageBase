@@ -15,8 +15,9 @@
         </tr>
         <tr
           v-for="part of partsDocsRef"
-          @click="selectedPartRef = part"
+          :key="part.id"
           :class="part === selectedPartRef ? 'selectedRow' : ''"
+          @click="selectedPartRef = part"
         >
           <td>{{ allCategories.find((c) => c.id == part.data().category.id)?.data().name }}</td>
           <td>{{ part.data().name }}</td>
@@ -27,11 +28,14 @@
         </tr>
       </table>
     </div>
-    <div class="PartSidebar" v-if="selectedPartRef">
+    <div
+      v-if="selectedPartRef"
+      class="PartSidebar"
+    >
       <span>
         <button @click="editPart(selectedPartRef?.id ?? '')">Edit</button>
         <button @click="clonePart(selectedPartRef!)">Clone</button>
-        <button @click="deletePart(selectedPartRef?.id ?? '')">Delete</button>
+        <button @click="deletePart(selectedPartRef!)">Delete</button>
       </span>
       <div>
         <h2>
@@ -79,14 +83,17 @@
           <th>Name</th>
           <th>Value</th>
         </tr>
-        <tr v-for="parameterEntry of selectedPartRef.data().parameters">
-          <td><SymbolFormat :paramId="parameterEntry.parameter.id" /></td>
+        <tr
+          v-for="parameterEntry of selectedPartRef.data().parameters"
+          :key="selectedPartRef.id + '_' + parameterEntry.parameter.id"
+        >
+          <td><SymbolFormat :param-id="parameterEntry.parameter.id" /></td>
           <td>
             {{
               parameterEntry.value +
-              " " +
-              parameterEntry.prefix.replace("-", "") +
-              parameterLookup[parameterEntry.parameter.id].unit
+                " " +
+                parameterEntry.prefix.replace("-", "") +
+                parameterLookup[parameterEntry.parameter.id].unit
             }}
           </td>
         </tr>
@@ -104,12 +111,14 @@ import {
   QueryDocumentSnapshot,
   limit,
   addDoc,
+  deleteDoc,
 } from "@firebase/firestore";
 import { Unsubscribe } from "@firebase/util";
 import { onMounted, onUnmounted, ref } from "vue";
 import { Part, PartColRef } from "../types/part";
 import { allCategories, allFootprints, parameterLookup } from "../staticLists";
 import SymbolFormat from "../components/SymbolFormat.vue";
+import { showModalDialog } from "../modalDialogStatic";
 
 const router = useRouter();
 
@@ -125,8 +134,18 @@ function clonePart(part: QueryDocumentSnapshot<Part>) {
   return;
 }
 
-function deletePart(id: string) {
-  console.log("delete not implemented yet");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function deletePart(part: QueryDocumentSnapshot<Part>) {
+  showModalDialog(
+    "Delete Part?",
+    part.data().name + " " + part.data().partNr,
+    () => {
+      deleteDoc(part.ref);
+    },
+    "DELETE",
+    undefined,
+    "CANCEL",
+  );
 }
 
 const partsDocsRef = ref(new Array<QueryDocumentSnapshot<Part>>());
